@@ -16019,7 +16019,7 @@ $.fn.sticky = function(parameters) {
             }
             else if( module.is.bottom() ) {
               if( scroll.top <= element.top ) {
-                module.debug('Jumped from bottom fixed to top fixed, most likely used home/end button');
+                module.debug('Jumped from bottom fixed to top fixed, most likely used resource-filters/end button');
                 module.setInitialPosition();
               }
               else {

@@ -1,40 +1,42 @@
+var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var path = require("path");
 
 module.exports = {
-  entry: {
-    app: ["./src/index.js"]
-  },
-  devtool: 'source-map',
+  // entry point of our application
+  entry: "./src/index.js",
+  // where to place the compiled bundle
   output: {
     path: path.resolve(__dirname, "build"),
-    publicPath: "/assets/",
-    filename: "bundle.js"
-  },
-  resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', 'css']
+    filename: 'bundle.js'
   },
   module: {
     loaders: [
       {
-        test: /\.js?$/,
-        loader: 'babel',
-        exclude: /node_modules/,
-        query: {
-           presets: ['es2015', 'react']
-        }
+        // use vue-loader for *.vue files
+        test: /\.vue$/,
+        loader: 'vue'
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css')
+        // use babel-loader for *.js files
+        test: /\.js$/,
+        loader: 'babel',
+        // important: exclude files in node_modules
+        // otherwise it's going to be really slow!
+        exclude: /node_modules/
       },
-      {test: /\.(svg|ttf|eot|woff|woff2)$/, loader: 'url?limit=100000'},
-      {test: /\.(jpg|png)$/, loader: "file"}
+      {
+        test: /\.(jpg|png)$/,
+        loader: "file"
+      }
     ]
   },
+  // if you are using babel-loader directly then
+  // the babel config block becomes required.
+  babel: {
+    presets: ['es2015'],
+    plugins: ['transform-runtime']
+  },
   plugins: [
-    new ExtractTextPlugin("styles.css"),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery"
@@ -47,4 +49,4 @@ module.exports = {
     inline: true,
     progress: true
   }
-};
+}

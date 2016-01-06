@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/src_old" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="react-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="react-redux-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="vue-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="vue-router-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="client node_modules" level="project" />
+    <orderEntry type="library" name="superagent-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="lodash-DefinitelyTyped" level="application" />
   </component>
 </module>
