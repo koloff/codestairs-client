@@ -11,11 +11,11 @@
       <div class="ui form">
         <div class="field">
           <label for="title">Title</label>
-          <input v-model="course.title" type="text" id="title"/>
+          <input v-model="title" type="text" id="title"/>
         </div>
         <div class="field">
           <label for="description">Brief description</label>
-          <textarea v-model="course.description" rows="2" id="description"></textarea>
+          <textarea v-model="description" rows="2" id="description"></textarea>
         </div>
       </div>
     </div>
@@ -34,7 +34,6 @@
 
 
       <div v-if="state.notAdded" class="ui card fluid">
-
         <div :class="state.loadingAddingCourse ? 'active' : ''" class="ui inverted dimmer">
           <div class="ui loader"></div>
         </div>
@@ -55,25 +54,25 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="ui card fluid link">
-        <div class="content">
-          <button class="ui red right floated icon button">
-            <i class="icon remove"> </i>
-          </button>
-          <div class="header"><a href="">CSS layoult</a></div>
-          <div class="meta">www.telerikacademy.com</div>
-        </div>
+    <div v-if="resources.length === 0" class="ui secondary segment">
+      <div class="ui info message">
+        <div class="header">No resources</div>
+        <p>This resource does not contain any resources yet. You can add by giving the resource URL above.</p>
       </div>
     </div>
 
+    <resource-in-course-edit
+      v-for="resource in resources"
+      :index="$index + 1"
+      :resource="resource"
+    ></resource-in-course-edit>
+
+
     <div class="ui divider hidden"></div>
 
-    <div v-for="resource in resources">
-      {{resource || json}}
-    </div>
-
-    <div @click="courseDone()" class="ui button primary large fluid">Done</div>
+    <div @click="courseDoneClick()" class="ui button primary large fluid">Done</div>
 
 
   </div>
@@ -86,12 +85,17 @@
   import co from 'co';
   import * as resourceHttp from '../../utils/resources-http';
 
+  import ResourceInCourseEdit from '../views-resources/ResourceInCourseEdit.vue';
+
   export default {
     name: 'EditCourse',
+    components: {
+      ResourceInCourseEdit
+    },
     props: {
       title: String,
       description: String,
-      resources: {
+      resourcesIds: {
         type: Array,
         default: function() {
           return [];
@@ -100,11 +104,8 @@
     },
     data() {
       return {
+        resources: [],
         resourceToAddUrl: '',
-        course: {
-          title: '',
-          description: ''
-        },
         state: {
           notAdded: false,
           loadingAddingCourse: false
@@ -112,8 +113,18 @@
       }
     },
     methods: {
-      courseDone() {
-        this.$dispatch('course-done', this.course);
+      courseDoneClick() {
+        let resourcesIds;
+        console.log(this.resourcesIds);
+        if (this.resources.length > 0) {
+          resourcesIds = _.pluck(JSON.parse(JSON.stringify(this.resources)), '_id');
+        }
+
+        this.$dispatch('course-done', {
+          title: this.title,
+          description: this.description,
+          resourcesIds: resourcesIds
+        });
       },
 
       resourceToAddClick() {
@@ -133,8 +144,7 @@
               self.resources.push(result);
               console.log(self.resources);
             } else {
-              // todo alert added
-              console.log('already added');
+              notifier('information', 'This resource is already added');
             }
           } else {
 
@@ -155,24 +165,27 @@
           co(function *() {
             try {
               self.state.loadingAddingCourse = true;
-              let resource = yield resourceHttp.addResource(self.resourceToAddUrl);
-              console.log(resource);
+              let result = yield resourceHttp.addResource(self.resourceToAddUrl);
               self.state.loadingAddingCourse = false;
               self.state.notAdded = false;
-              self.resources.push(resource);
+              self.resources.push(result.resource);
               notifier('success', 'You successfully added this course!');
-            } catch(err) {
-            	console.log(err);
-              console.log(err.reason);
-              notifier('error', 'The resource was not added!');
+            } catch (err) {
+              console.log(err);
+              self.state.loadingAddingCourse = false;
+              self.state.notAdded = false;
+              if (err.reason === 'CANNOT_EXTRACT') {
+                notifier('error', 'This resource can not be extracted!');
+              } else {
+                notifier('error', 'The resource was not extracted!');
+              }
             }
           });
 
         } else {
-          console.log('should not add');
+          this.state.notAdded = false;
         }
 
-        console.log('not added finished');
       }
     }
   }

@@ -1,6 +1,6 @@
 export default function(router) {
   router.map({
-    '/': {
+    '/:view': {
       component: require('./components/home/Home.vue')
     },
     '/add-resource': {
@@ -9,5 +9,9 @@ export default function(router) {
     '/add-course': {
       component: require('./components/add/AddCourse.vue')
     }
-  })
+  });
+
+  router.redirect({
+    '/': '/resources'
+  });
 }

@@ -12,11 +12,7 @@
 
   export default {
     name: 'Search',
-    data() {
-      return {
-        searchPhrase: ''
-      };
-    },
+    props: ['searchPhrase'],
     methods: {
       search() {
         this.$dispatch('search', this.searchPhrase);

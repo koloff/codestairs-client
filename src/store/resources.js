@@ -11,7 +11,6 @@ export function getResourcesSearch() {
 
 export function fetchResourcesSearch(phrase) {
   return co(function *() {
-    console.log('coo');
     let result = yield searchHttp.fetchSearch(phrase, 'resources');
     if (result) {
       state.resourcesSearch = result;

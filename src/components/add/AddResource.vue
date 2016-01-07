@@ -12,6 +12,9 @@
     </div>
 
     <div class="ui blue very padded secondary segment">
+      <div :class="state.loading ? 'active' : ''" class="ui inverted dimmer">
+        <div class="ui loader"></div>
+      </div>
       <h4 class="ui horizontal divider header">
         <i class="world icon"></i>
         Resource URL
@@ -30,12 +33,14 @@
       </button>
 
     </div>
+
   </div>
 </template>
 
 
 <script>
-
+  import co from 'co';
+  import notifier from '../../utils/notifier';
   import * as resources from '../../store/resources';
   import * as resourceHttp from '../../utils/resources-http';
 
@@ -45,12 +50,28 @@
       return {
         resource: {
           url: ''
+        },
+        state: {
+          loading: false
         }
       }
     },
     methods: {
       addResourceClick() {
-        resourceHttp.addResource(this.resource.url);
+        var self = this;
+        co(function *() {
+          try {
+            self.state.loading = true;
+            let result = yield resourceHttp.addResource(self.resource.url);
+            notifier('success', 'The resource was added to Codestairs!');
+            self.$route.router.go('/resources');
+          } catch(err) {
+            console.log(err);
+            notifier('error', 'The resource was not added!');
+          }
+
+          self.state.loading = false;
+        });
       }
     }
   }

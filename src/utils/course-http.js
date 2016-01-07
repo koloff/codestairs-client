@@ -2,22 +2,23 @@ import request from 'superagent';
 
 import {api} from './../config';
 
-export function fetchSearch(phrase, type) {
+// todo update course will be on /courses/:courseId with put
+
+
+export function addCourse(course) {
 
   let promise = new Promise((resolve, reject) => {
     request
-      .get(`${api}/search/${type}`)
-      .query({phrase: phrase})
+      .post(`${api}/courses`)
+      .send(course)
       .end((err, res) => {
         if (err) {
           return reject(res.body);
         }
 
-        console.log(res.body);
         return resolve(res.body);
       });
   });
-
 
   return promise;
 }

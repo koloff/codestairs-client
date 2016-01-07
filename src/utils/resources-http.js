@@ -8,20 +8,18 @@ export function addResource(url) {
     url: url
   };
 
-
-  // todo fix resolves rejects !!!!! err - contains only err, res - always available, res.text - must parse!
   let promise = new Promise((resolve, reject) => {
     request
       .post(`${api}/resources`)
       .send(query)
       .end((err, res) => {
+        let text = res.text ? JSON.parse(res.text) : '';
+
         if (err) {
-          console.log(err.reason);
-          console.log(res);
-          return reject(err);
+          return reject(text);
         }
 
-        resolve(res.text);
+        return resolve(text);
       });
   });
 
@@ -32,28 +30,18 @@ export function getResource(byWhat, identifier) {
   let promise = new Promise((resolve, reject) => {
     let query = {};
     query[byWhat] = identifier;
-    console.log(typeof identifier);
     request
       .get(`${api}/resources`)
       .query(query)
       .end((err, res) => {
+
+        let text = res.text ? JSON.parse(res.text) : '';
+
         if (err) {
-          return reject(err);
+          return reject(text);
         }
 
-        console.log(res);
-        console.log(err);
-        console.log('errorrrrrr');
-
-        if (res.text) {
-          let text = JSON.parse(res.text);
-          if (text.reason) {
-            return reject(text);
-          }
-          return resolve(text);
-        } else {
-          return resolve(null);
-        }
+        return resolve(text);
       });
   });
 

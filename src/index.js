@@ -1,6 +1,9 @@
 // load semantic ui's js
 import './static/semantic-ui/semantic';
 
+// load custom css
+import './style/style.css';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import configRouter from './router-config';

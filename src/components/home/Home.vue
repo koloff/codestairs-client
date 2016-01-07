@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedFunction -->
 <template>
   <div>
     <div class="ui segment basic very padded">
@@ -6,7 +7,7 @@
       </h1>
     </div>
 
-    <search :current-view="currentView"></search>
+    <search :search-phrase="searchPhrase"></search>
 
     <div class="ui large buttons fluid">
       <button @click="changeCurrentView('resources')" :class="(currentView === 'resources') ? 'active' : ''"
@@ -35,11 +36,11 @@
 
     <div v-if="currentView === 'courses'">
       <h1>courses</h1>
-    </div>
+      <h2 v-for="course in courses">
 
-    {{ resources | json}}
-    <br><br><br>
-    {{courses | json}}
+        {{$index}}. {{course.title}}
+      </h2>
+    </div>
 
   </div>
 </template>
@@ -48,7 +49,7 @@
 
   import co from 'co';
   import Search from './Search.vue';
-  import MiniResource from '../resource-views/MiniResource.vue';
+  import MiniResource from '../views-resources/MiniResource.vue';
 
   import {fetchResourcesSearch} from '../../store/resources';
   import {fetchCoursesSearch} from '../../store/courses';
@@ -71,15 +72,31 @@
         courses: []
       }
     },
-    ready() {
-      this.loadNeededData();
+
+    route: {
+      data() {
+        let viewRoute = this.$route.params.view;
+        if (viewRoute !== 'resources' && viewRoute !== 'courses') {
+          this.$route.router.go('/resources');
+        }
+        this.currentView = this.$route.params.view;
+        console.log('current view');
+        console.log(this.currentView);
+
+        if (this.$route.query.search) {
+          console.log('query search foundddd');
+          this.searchPhrase = this.$route.query.search;
+          console.log(this.$route.query.search);
+        }
+        this.loadNeededData();
+      }
     },
+
     methods: {
 
-      loadNeededData(phrase) {
-        console.log(`phrase   ${phrase}`);
+      loadNeededData() {
 
-        if (phrase === '' || phrase === ' ') {
+        if (this.searchPhrase === '' || this.searchPhrase === ' ') {
           return;
         }
 
@@ -88,9 +105,8 @@
           let self = this;
           co(function *() {
             try {
-              let resourcesResponse = yield fetchResourcesSearch(phrase);
-              self.resources = JSON.parse(resourcesResponse.text);
-
+              let result = yield fetchResourcesSearch(self.searchPhrase);
+              self.resources = result;
             } catch (err) {
               if (err) {
                 console.log(err);
@@ -106,22 +122,33 @@
           let self = this;
           co(function *() {
             try {
-              let coursesResponse = yield fetchCoursesSearch(phrase);
-              self.courses = JSON.parse(coursesResponse.text);
+              let result = yield fetchCoursesSearch(self.searchPhrase);
+              self.courses = result;
+              console.log(coursesResponse);
+              console.log('');
             } catch (err) {
               if (err) {
                 console.log(err);
               }
             }
           });
-          console.log(this.courses);
           this.shouldFetchSearch.courses = false
         }
       },
 
       changeCurrentView(view) {
         this.currentView = view;
-        this.loadNeededData(this.searchPhrase);
+        this.changeRoute();
+      },
+
+      changeRoute() {
+        let route = `/${this.currentView}`;
+        // if search is specified, save it
+        if (this.searchPhrase !== '' && this.searchPhrase !== ' ') {
+          route += `?search=${this.searchPhrase}`;
+        }
+        this.$route.router.go(route);
+        this.loadNeededData();
       }
     },
     events: {
@@ -131,7 +158,7 @@
           courses: true
         };
         this.searchPhrase = phrase;
-        this.loadNeededData(phrase);
+        this.changeRoute();
       }
     }
   }

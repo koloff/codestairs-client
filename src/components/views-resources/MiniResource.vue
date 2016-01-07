@@ -47,8 +47,8 @@
         resourcesScreenshotsUrl: resourcesScreenshotsUrl
       }
     },
-    ready() {
-      console.log(this.dateAdded);
+    ready () {
+      // todo prevent html reparsing
       $('.special.cards .image').dimmer({
         on: 'hover'
       });
