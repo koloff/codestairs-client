@@ -8,7 +8,7 @@
         <div class="content">
           <div class="center">
             <div class="ui large buttons">
-              <button class="ui button primary">Open</button>
+              <a :href="'http://' + url" target="_blank" class="ui button primary">Open</a>
               <div class="or"></div>
               <button class="ui button primary">Details</button>
             </div>

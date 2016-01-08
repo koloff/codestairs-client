@@ -7,7 +7,8 @@ module.exports = {
   // where to place the compiled bundle
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/public/'
   },
   module: {
     loaders: [
@@ -53,4 +54,4 @@ module.exports = {
     inline: true,
     progress: true
   }
-}
+};

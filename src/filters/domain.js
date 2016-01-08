@@ -2,6 +2,9 @@ import Vue from 'vue';
 
 
 Vue.filter('domain', function (url) {
+  if (!url) {
+    return '';
+  }
 
   var domain;
   //find & remove protocol (http, ftp, etc.) and get domain

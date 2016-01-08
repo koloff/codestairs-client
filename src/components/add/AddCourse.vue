@@ -13,7 +13,21 @@
 
     <div class="ui blue very padded tertiary segment">
 
+
       <edit-course></edit-course>
+
+      <div :class="!identity.authenticated ? 'active' : ''" class="ui dimmer">
+        <div class="content">
+          <div class="center">
+            <h2 class="ui inverted icon header">
+              <i class="lock icon"></i>
+              Only for registered users
+            </h2>
+            <br />
+            <button v-link="{path: '/authenticate'}" class="ui green button">Login</button>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -25,8 +39,10 @@
   import notifier from '../../utils/notifier';
   import EditCourse from '../edit/EditCourse.vue';
   import * as resources from '../../store/resources';
-  import * as resourceHttp from '../../utils/resources-http';
-  import * as courseHttp from '../../utils/course-http';
+  import * as resourceHttp from '../../http-fetchers/resources';
+  import * as courseHttp from '../../http-fetchers/courses';
+  
+  import * as identity from '../../store/identity';
 
   export default {
     name: 'AddCourse',
@@ -35,6 +51,7 @@
     },
     data() {
       return {
+        identity: identity.state,
         course: {
           title: '',
           description: '',

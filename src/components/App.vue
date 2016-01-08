@@ -4,15 +4,20 @@
     <div class="ui container">
       <router-view></router-view>
     </div>
+    <footer></footer>
   </div>
 </template>
 
 <script>
 
   import TopHeader from './Header.vue';
+  import Footer from './Footer.vue';
 
   export default {
-    components: {TopHeader}
+    components: {
+      TopHeader,
+      Footer
+    }
   }
 
 </script>

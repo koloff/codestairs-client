@@ -35,11 +35,14 @@
     </div>
 
     <div v-if="currentView === 'courses'">
-      <h1>courses</h1>
-      <h2 v-for="course in courses">
-
-        {{$index}}. {{course.title}}
-      </h2>
+      
+      <mini-course
+        v-for="course in courses"
+        :title="course.title"
+        :description="course.description"
+        :resources="course.resources"
+      ></mini-course>
+      
     </div>
 
   </div>
@@ -50,15 +53,22 @@
   import co from 'co';
   import Search from './Search.vue';
   import MiniResource from '../views-resources/MiniResource.vue';
+  import MiniCourse from '../views-courses/MiniCourse.vue';
 
   import {fetchResourcesSearch} from '../../store/resources';
   import {fetchCoursesSearch} from '../../store/courses';
+
+
+  import * as resourcesFetcher from '../../http-fetchers/resources';
+  import * as coursesFetcher from '../../http-fetchers/courses';
+  import * as searchFetcher from '../../http-fetchers/search';
 
   export default {
     name: 'Home',
     components: {
       Search,
-      MiniResource
+      MiniResource,
+      MiniCourse
     },
     data() {
       return {
@@ -97,7 +107,39 @@
       loadNeededData() {
 
         if (this.searchPhrase === '' || this.searchPhrase === ' ') {
-          return;
+          // get latest resources
+          if (this.shouldFetchSearch.resources && this.currentView === 'resources') {
+            console.log('fetching latest resources...');
+            let self = this;
+            co(function *() {
+              try {
+                let result = yield resourcesFetcher.getMultiple(0, 16);
+                self.resources = result;
+                console.log($pure(self.resources));
+              } catch (err) {
+                console.log(err);
+              }
+            });
+            console.log(this.resources);
+            this.shouldFetchSearch.resources = false;
+          }
+
+          // get latest courses
+          if (this.shouldFetchSearch.courses && this.currentView === 'courses') {
+            console.log('fetching latest courses...');
+            let self = this;
+            co(function *() {
+              try {
+                let result = yield coursesFetcher.getMultiple(0, 16);
+                self.courses = result;
+                console.log($pure(self.courses));
+              } catch (err) {
+                console.log(err);
+              }
+            });
+            console.log(this.courses);
+            this.shouldFetchSearch.courses = false;
+          }
         }
 
         if (this.shouldFetchSearch.resources && this.currentView === 'resources') {
@@ -105,7 +147,7 @@
           let self = this;
           co(function *() {
             try {
-              let result = yield fetchResourcesSearch(self.searchPhrase);
+              let result = yield searchFetcher.fetchSearch(self.searchPhrase, 'resources');
               self.resources = result;
             } catch (err) {
               if (err) {
@@ -122,10 +164,9 @@
           let self = this;
           co(function *() {
             try {
-              let result = yield fetchCoursesSearch(self.searchPhrase);
+              let result = yield searchFetcher.fetchSearch(self.searchPhrase, 'courses');
+              console.log(result);
               self.courses = result;
-              console.log(coursesResponse);
-              console.log('');
             } catch (err) {
               if (err) {
                 console.log(err);

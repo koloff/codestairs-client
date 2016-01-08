@@ -83,7 +83,7 @@
   import notifier from '../../utils/notifier';
   import _ from 'lodash';
   import co from 'co';
-  import * as resourceHttp from '../../utils/resources-http';
+  import * as resourceHttp from '../../http-fetchers/resources';
 
   import ResourceInCourseEdit from '../views-resources/ResourceInCourseEdit.vue';
 

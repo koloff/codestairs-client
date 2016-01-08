@@ -1,5 +1,5 @@
 import co from 'co';
-import * as searchHttp from '../utils/search-http';
+import * as searchHttp from '../http-fetchers/search';
 
 
 export function fetchCoursesSearch(phrase) {

@@ -42,7 +42,7 @@
   import co from 'co';
   import notifier from '../../utils/notifier';
   import * as resources from '../../store/resources';
-  import * as resourceHttp from '../../utils/resources-http';
+  import * as resourceHttp from '../../http-fetchers/resources';
 
   export default {
     name: 'AddResource',

@@ -21,7 +21,8 @@
     "style-loader": "^0.13.0",
     "vue-hot-reload-api": "^1.2.2",
     "vue-html-loader": "^1.1.0",
-    "vue-loader": "^7.5.2",
+    "vue-loader": "^8.0.2",
+    "vue-style-loader": "^1.0.0",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0"
   },
@@ -32,6 +33,7 @@
     "noty": "^2.3.7",
     "superagent": "^1.6.1",
     "vue": "^1.0.13",
-    "vue-router": "^0.7.7"
+    "vue-router": "^0.7.7",
+    "vue-validator": "^2.0.0-alpha.9"
   }
 }
