@@ -3,7 +3,7 @@
     <div class="ui stackable main inverted menu">
       <div class="ui container">
         <a v-link="{path: '/'}" class="header item">
-          <img class="ui image icon" src="../static/img/logo1_small.png" alt="" />
+          <img class="ui image icon" src="../assets/img/logo1_small.png" alt="" />
          &nbsp; Codestairs
         </a>
         <a v-link="{path: '/add-resource'}" class="item center">
@@ -18,7 +18,7 @@
           <i class="ui icon code"></i>
           API
         </a>
-        <a class="item center">
+        <a v-link="{path: '/about'}" class="item center">
           <i class="ui icon info circle"></i>
           About
         </a>
@@ -27,7 +27,7 @@
 
           <div class="item">
             <div class="ui transparent inverted left icon input">
-              <input type="text" placeholder="Search..."/>
+              <input @keydown.enter="goSearch()" v-model="search" type="text" placeholder="Search..."/>
               <i class="search icon"></i>
             </div>
           </div>
@@ -60,7 +60,8 @@
   export default {
     data() {
       return {
-        identity: identity.state
+        identity: identity.state,
+        search: ''
       }
     },
     methods: {
@@ -68,6 +69,10 @@
         auth.logout();
         notifier('success', 'You signed out successfully!');
         console.log(this.identity.profile.username);
+      },
+      goSearch() {
+        this.$route.router.go(`/resources?search=${this.search}`);
+        this.search = '';
       }
     }
   }

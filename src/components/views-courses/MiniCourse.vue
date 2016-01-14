@@ -10,12 +10,13 @@
           </div>
           <div class="ui column right aligned six wide">
 
-            <div class="ui star rating"></div> (5) <br>
-            <a href="#" class="comments-link">7 Comments</a>
+            <rating :count="rating.votes.length" :value="rating.value" :id="id" :type="'course'"></rating>
+
+            <a href="#" class="comments-link">0 Comments</a>
           </div>
         </div>
       </div>
-      <span>Last edit: 12 Jan 2015</span>
+      <span>Last edit: 10 Jan 2016</span>
       <div class="ui divider small hidden"></div>
 
       <p>
@@ -41,18 +42,14 @@
 
 <script>
   import ResourceInCourse from '../views-resources/ResourceInCourse.vue';
+  import Rating from '../social/Rating.vue';
 
   export default {
     name: 'MiniResource',
-    props: ['title', 'description', 'resources'],
+    props: ['title', 'description', 'resources', 'rating', 'id'],
     components: {
-      ResourceInCourse
-    },
-    ready() {
-      $('.rating').rating({
-        initialRating: 4,
-        maxRating: 5
-      })
+      ResourceInCourse,
+      Rating
     }
   }
 </script>

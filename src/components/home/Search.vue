@@ -1,8 +1,8 @@
 <template>
-  <div class="ui segment blue center aligned">
-    <div class="ui huge left icon input transparent center aligned">
-      <input v-on:keyup.enter="search" v-model="searchPhrase" type="text" placeholder="I want to learn..."/>
-      <i class="search icon"> </i>
+  <div class="ui segment secondary blue center aligned">
+    <div class="ui huge right icon input center aligned">
+      <input v-model="searchPhrase" type="text" @keydown.enter="search()" placeholder="I want to learn...">
+      <i @click="search()" class="inverted circular search link icon"></i>
     </div>
   </div>
 </template>

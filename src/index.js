@@ -1,10 +1,5 @@
-// load semantic ui's js
-import './static/semantic-ui/semantic';
-
 // load custom css
 import './style/style.css';
-
-
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -17,6 +12,7 @@ import App from './components/App.vue';
 import './utils/object-pure';
 
 
+console.log('processss envvvvvv', + process.env);
 
 
 // load identity
@@ -28,9 +24,10 @@ if (localStorage.getObject('profile')) {
 }
 
 
-// todo - remove at deploy
 // config Vue
-Vue.config.debug = true;
+if (process.env.NODE_ENV === 'production') {
+  Vue.config.debug = true;
+}
 
 // bootstrap validators
 Vue.use(VueValidator);
@@ -60,5 +57,3 @@ configRouter(router);
 
 // boostrap the app
 router.start(App, '#root');
-
-

@@ -18,6 +18,9 @@ export default function(router) {
     },
     '/resource/:id': {
       component: require('./components/views-resources/ResourceDetails.vue')
+    },
+    '/about': {
+      component: require('./components/info/About.vue')
     }
   });
 

@@ -805,7 +805,7 @@ $.fn.visibility = function(parameters) {
               direction = 'up';
             }
             else {
-              direction = 'static';
+              direction = 'assets';
             }
             module.cache.direction = direction;
             return module.cache.direction;

@@ -146,10 +146,10 @@
       }
     },
     ready() {
-      $('.rating').rating({
-        initialRating: 4,
-        maxRating: 5
-      })
+//      $('.rating').rating({
+//        initialRating: 4,
+//        maxRating: 5
+//      })
     }
   }
 </script>

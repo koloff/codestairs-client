@@ -143,7 +143,7 @@ $.fn.transition = function() {
           if(!direction) {
             direction = module.can.transition()
               ? module.get.direction()
-              : 'static'
+              : 'assets'
             ;
           }
           interval = (interval !== undefined)

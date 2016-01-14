@@ -3,7 +3,7 @@
   <div>
     <div class="ui segment basic very padded">
       <h1>
-        <img class="ui image medium centered" src="../../static/img/logo2.png" alt=""/>
+        <img class="ui image medium centered" src="../../assets/img/logo2.png" alt=""/>
       </h1>
     </div>
 
@@ -26,7 +26,9 @@
         <mini-resource
           v-for="resource in resources"
           track-by="_id"
+          :id="resource._id"
           :title="resource.title"
+          :type="resource.type"
           :url="resource.url"
           :date-added="resource.dateAdded"
           :screenshot-file="resource.screenshotFile"
@@ -38,9 +40,11 @@
       
       <mini-course
         v-for="course in courses"
+        :id="course._id"
         :title="course.title"
         :description="course.description"
         :resources="course.resources"
+        :rating="course.rating"
       ></mini-course>
       
     </div>

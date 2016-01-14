@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <span class="ui right corner label">
-      <i class="newspaper icon"></i>
+      <i :class="getTypeClass()" class="icon"></i>
     </span>
     <div class="blurring dimmable image">
       <div class="ui inverted dimmer">
@@ -26,10 +26,10 @@
     </div>
     <div class="extra content">
       <span class="left floated">
-        <div class="ui star rating" data-rating="3"></div> (55)
+         <rating :count="0" :value="0" :id="id" :type="'course'"></rating>
       </span>
       <span class="right floated">
-        44 Comments
+        0 Comments
       </span>
     </div>
   </div>
@@ -38,10 +38,14 @@
 
 <script>
   import {resourcesScreenshotsUrl} from '../../config';
+  import Rating from '../social/Rating.vue';
   
   export default {
     name: 'MiniResource',
-    props: ['title', 'url', 'dateAdded', 'screenshotFile'],
+    components: {
+      Rating
+    },
+    props: ['id', 'title', 'url', 'dateAdded', 'screenshotFile', 'type'],
     data() {
       return {
         resourcesScreenshotsUrl: resourcesScreenshotsUrl
@@ -52,11 +56,11 @@
       $('.special.cards .image').dimmer({
         on: 'hover'
       });
-
-      $('.rating').rating({
-        initialRating: 4,
-        maxRating: 5
-      })
+    },
+    methods: {
+      getTypeClass() {
+        return (this.type === 'video') ? 'video play' : 'newspaper';
+      }
     }
   }
 </script>

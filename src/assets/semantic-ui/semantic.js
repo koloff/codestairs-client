@@ -10179,14 +10179,14 @@ $.fn.popup = function(parameters) {
             if(parentNode) {
               var
                 is2D     = ($node.css('transform') === 'none'),
-                isStatic = ($node.css('position') === 'static'),
+                isStatic = ($node.css('position') === 'assets'),
                 isHTML   = $node.is('html')
               ;
               while(parentNode && !isHTML && isStatic && is2D) {
                 parentNode = parentNode.parentNode;
                 $node    = $(parentNode);
                 is2D     = ($node.css('transform') === 'none');
-                isStatic = ($node.css('position') === 'static');
+                isStatic = ($node.css('position') === 'assets');
                 isHTML   = $node.is('html');
               }
             }
@@ -17449,7 +17449,7 @@ $.fn.transition = function() {
           if(!direction) {
             direction = module.can.transition()
               ? module.get.direction()
-              : 'static'
+              : 'assets'
             ;
           }
           interval = (interval !== undefined)
@@ -21019,7 +21019,7 @@ $.fn.visibility = function(parameters) {
               direction = 'up';
             }
             else {
-              direction = 'static';
+              direction = 'assets';
             }
             module.cache.direction = direction;
             return module.cache.direction;

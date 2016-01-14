@@ -1,12 +1,13 @@
 <template>
   <div>
+    <div class="ui divider hidden"></div>
     <div class="ui inverted vertical footer segment">
       <div class="ui container">
         <div class="ui stackable inverted divided equal height stackable grid">
           <div class="three wide column">
             <h4 class="ui inverted header">About</h4>
             <div class="ui inverted link list">
-              <a href="#" class="item">About Codestairs</a>
+              <a v-link="{path: '/about'}" class="item">About Codestairs</a>
               <a href="#" class="item">Contact us</a>
             </div>
           </div>
@@ -21,7 +22,7 @@
             </a>
           </div>
           <div class="ten wide right aligned column">
-            <div>&copy; 2015 Codestairs</div>
+            <div>&copy; 2016 Codestairs</div>
           </div>
         </div>
       </div>
@@ -31,7 +32,10 @@
 
 <script>
   export default {
-    name: 'Footer'
+    name: 'BottomFooter',
+    ready() {
+      console.log('foooootteeeerrr');
+    }
   }
 </script>
 
