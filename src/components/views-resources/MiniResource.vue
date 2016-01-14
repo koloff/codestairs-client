@@ -10,12 +10,12 @@
             <div class="ui large buttons">
               <a :href="'http://' + url" target="_blank" class="ui button primary">Open</a>
               <div class="or"></div>
-              <button class="ui button primary">Details</button>
+              <a v-link="{path: '/resource/'+id}" class="ui button primary">Details</a>
             </div>
           </div>
         </div>
       </div>
-      <img :src="resourcesScreenshotsUrl + '/' + screenshotFile" />
+      <img src="" :src="resourcesScreenshotsUrl + '/' + screenshotFile" />
     </div>
     <div class="content">
       <a class="header">{{title}}</a>

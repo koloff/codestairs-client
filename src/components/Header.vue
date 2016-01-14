@@ -40,7 +40,7 @@
             {{identity.authenticated ? identity.profile.username : ''}}
             <i class="dropdown icon"></i>
             <div class="menu">
-              <div class="item"><i class="ui icon setting"></i>Profile</div>
+              <div v-link="{path: '/profile'}" class="item"><i class="ui icon setting"></i>Profile</div>
               <div class="item"><i class="ui icon student"></i>My courses</div>
               <div @click="logout()" class="item"><i class="ui icon sign out"></i>Logout</div>
             </div>

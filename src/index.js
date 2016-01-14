@@ -25,7 +25,7 @@ if (localStorage.getObject('profile')) {
 
 
 // config Vue
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
   Vue.config.debug = true;
 }
 
