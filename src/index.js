@@ -12,7 +12,6 @@ import App from './components/App.vue';
 import './utils/object-pure';
 
 
-console.log('processss envvvvvv', + process.env);
 
 
 // load identity

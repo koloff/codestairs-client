@@ -32,10 +32,7 @@
 
 <script>
   export default {
-    name: 'BottomFooter',
-    ready() {
-      console.log('foooootteeeerrr');
-    }
+    name: 'BottomFooter'
   }
 </script>
 

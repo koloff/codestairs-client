@@ -13,7 +13,6 @@ export function setToken(tokenToSet) {
 
   // if token is truthy authenticate
   state.authenticated = !!tokenToSet;
-  console.log(state.authenticated);
 }
 
 export function setProfile(userObj) {

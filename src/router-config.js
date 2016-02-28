@@ -7,6 +7,9 @@ export default function(router) {
     '/add-resource': {
       component: require('./components/add/AddResource.vue')
     },
+    'new': {
+      component: require('./components/new-path/NewPathPage.vue')
+    },
     '/add-course': {
       component: require('./components/add/AddCourse.vue')
     },
