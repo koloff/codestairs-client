@@ -4,11 +4,9 @@
     resource4
     <div id="wrapper">
       <box
-        v-if="domReady"
-        v-for="resource in 10"
+        v-for="resource in resources"
+        :index="$index"
         :resource="resource">
-        <!--:box-position="calculateBoxPosition($index, 5, 3)"-->
-
       </box>
     </div>
 
@@ -35,9 +33,6 @@
     },
     props: ['resources'],
     ready() {
-      console.log('readyyy');
-      this.domReady = true;
-
       let $wrapper = $('#wrapper');
       let sortable = new Sortable($wrapper.get(0), {
         animation: 150
@@ -45,6 +40,8 @@
 
       this.boxesPerRow = this.calculateBoxesPerRow($wrapper);
       console.log('boxesPerRow: ', this.boxesPerRow);
+
+      this.broadcastBoxesPositions();
     },
     methods: {
 
@@ -76,11 +73,19 @@
         } else {
           position.push('middle')
         }
-        console.log(position);
 
         return position;
       },
-      
+
+      broadcastBoxesPositions() {
+        let self = this;
+        let positions = this.resources.map(function (resource, index){
+           return self.calculateBoxPosition(index, self.boxesPerRow, self.calculateBoxRow(index, self.boxesPerRow));
+        });
+
+        this.$broadcast('boxes-positions-calculated', positions);
+      },
+
       getResources() {
         console.log($pure(this.resources));
       }
