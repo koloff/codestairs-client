@@ -6,24 +6,43 @@
           <img class="ui image icon" src="../assets/img/logo1_small.png" alt="" />
          &nbsp; Codestairs
         </a>
-        <a v-link="{path: '/add-resource'}" class="item center">
-          <i class="ui icon world"></i>
-          Add resource
+
+
+
+
+
+        <a class="item center">
+          <i class="ui icon idea"></i>
+          Requests
         </a>
-        <a v-link="{path: '/add-course'}" class="item center">
-          <i class="ui icon student"></i>
-          Add course
-        </a>
+
+
+
+
+        <!--<a v-link="{path: '/add-resource'}" class="item center">-->
+          <!--<i class="ui icon world"></i>-->
+          <!--Add resource-->
+        <!--</a>-->
+        <!--<a v-link="{path: '/add-course'}" class="item center">-->
+          <!--<i class="ui icon student"></i>-->
+          <!--Add course-->
+        <!--</a>-->
+
+
+
         <a class="item center">
           <i class="ui icon code"></i>
           API
         </a>
-        <a v-link="{path: '/about'}" class="item center">
-          <i class="ui icon info circle"></i>
-          About
-        </a>
+
+
 
         <div class="right menu">
+          <button class="ui button small blue">
+          <i class="student icon"></i>
+          Add path
+        </button>
+
 
           <div class="item">
             <div class="ui transparent inverted left icon input">

@@ -11,7 +11,7 @@ import validators from './validators/validators';
 import App from './components/App.vue';
 import './utils/object-pure';
 
-
+window.Vue = Vue;
 
 
 // load identity
@@ -21,7 +21,6 @@ if (localStorage.getObject('token')) {
 if (localStorage.getObject('profile')) {
   identity.setProfile(localStorage.getObject('profile'));
 }
-
 
 // config Vue
 if (process.env.NODE_ENV !== 'production') {

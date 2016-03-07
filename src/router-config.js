@@ -10,6 +10,15 @@ export default function(router) {
     'new': {
       component: require('./components/new-path/NewPathPage.vue')
     },
+    'paths': {
+      component: require('./components/paths/PathsView.vue')
+    },
+    'requests': {
+      component: require('./components/requests/RequestsPage.vue')
+    },
+    'requests/:requestId': {
+      component: require('./components/requests/RequestDetails.vue')
+    },
     '/add-course': {
       component: require('./components/add/AddCourse.vue')
     },
