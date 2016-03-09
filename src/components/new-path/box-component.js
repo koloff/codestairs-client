@@ -10,9 +10,6 @@ export default Vue.extend({
   <div class="container-box">
     <div class="content-box">
 
-      {{index}}
-
-
       <mini-resource-details-box v-if="isResource" :index="index" :resource="resource" :box-methods="boxMethods"></mini-resource-details-box>
       <insert-resource-box v-if="!isResource" :box-methods="boxMethods"></insert-resource-box>
 
@@ -84,7 +81,7 @@ export default Vue.extend({
 
     removeResource(index) {
       this.$destroy();
-      this.removeBoxFunction(index);
+      this.boxMethods.removeBoxFunction(index);
     },
 
     calculateStyles(boxPosition) {

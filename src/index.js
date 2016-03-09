@@ -35,6 +35,9 @@ validators(Vue);
 // bootstrap filters
 import './filters/domain';
 import './filters/date';
+import './filters/duration';
+import './filters/difficulty';
+import './filters/difficulty-color';
 
 // bootstrap directives
 import dropdown from './directives/dropdown-semantic';

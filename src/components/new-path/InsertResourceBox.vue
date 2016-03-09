@@ -5,11 +5,12 @@
       <div class="add-box">
 
         <div class="ui left icon input">
-          <input data-clickable="true"
-                 @click="click($event)"
-                 type="text"
-                 placeholder="www.resource.com"
-                 class="url-input"/>
+          <input
+            v-model="url"
+            data-clickable="true"
+            type="text"
+            placeholder="www.resource.com"
+            class="url-input"/>
 
           <i class="world icon"></i>
         </div>
@@ -33,24 +34,8 @@
       };
     },
     ready() {
-
-
-
-//      $('.url-input').on('input', function() {
-//        var e = $.Event('keypress');
-//        e.which = 13; // Character 'A'
-//        $('.url-input').trigger(e);
-//      });
-
     },
     methods: {
-      click(event) {
-        //        console.log(event);
-        //        event.target.focus();
-        //        event.preventDefault();
-        //        event.stopPropagation();
-      },
-
       change() {
         console.log('changed');
       },

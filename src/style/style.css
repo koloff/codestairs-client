@@ -26,9 +26,6 @@
     display: inline-block;
     background: transparent;
 }
-.content-box {
-    background: green;
-}
 
 .arrow {
     position: absolute;

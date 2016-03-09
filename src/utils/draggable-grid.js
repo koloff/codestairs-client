@@ -155,8 +155,6 @@ export default function DraggableGrid(options) {
     }
 
     function onPress() {
-      console.log('press');
-      console.log(this);
 
 
       let posX = this.pointerEvent.pageX;
@@ -191,7 +189,6 @@ export default function DraggableGrid(options) {
     }
 
     function onDrag() {
-      console.log('drag');
 
       TweenLite.to(element, 0.2, {
         autoAlpha: 0.75,
@@ -230,10 +227,7 @@ export default function DraggableGrid(options) {
     }
 
     function onRelease() {
-
-      console.log('release');
-
-      console.log(this);
+      
 
       // Move tile back to last position if released out of bounds
       this.hitTest($list, 0)

@@ -1,6 +1,5 @@
 import Vue from 'vue';
 
-
 Vue.filter('date', function(dateStr) {
 
   let date = new Date(dateStr);

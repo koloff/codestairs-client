@@ -3,35 +3,42 @@
     <div class="ui card course">
       <div class="courseCard">
         <div class="courseScreenshot">
-          <a href="http://google.com" class="ui small courseImage image">
+          <div href="http://google.com" class="ui small courseImage image">
             <img class="courseShot" :src="'../../assets/img/mockups/img/' + resource.screenshotName"/>
-          </a>
+          </div>
         </div>
 
         <div class="ui vertical divider imgDivider"></div>
 
         <div class="courseText">
 
-          <div class="ui mini icon inverted buttons closeAndEdit">
-            <button @click="removeResource(index)" class="ui mini inverted red button removeButton"><i class="remove icon"></i>
-              <button class="ui mini inverted grey button"><i class="setting icon editIcon"></i></button>
+          <div data-clickable="true" class="ui mini icon inverted buttons closeAndEdit">
+            <button data-clickable="true"  @click="removeResource(index)" class="ui mini inverted red button removeButton"><i class="remove icon"></i>
+              <button
+                @click="changeResourceData(resource._id, resource)"
+                class="ui mini inverted grey button"
+                data-clickable="true">
+                <i class="setting icon editIcon"></i>
+              </button>
             </button>
           </div>
 
-          <input v-model="resourceData" type="text">
-          <button @click="changeResourceData(resource._id, resourceData)"></button>
           
           <h4 class="ui header courseHeader">{{resource.title}}</h4>
           <div class="courseDescription description">
             {{resource.description}}
           </div>
         </div>
+
         <div class="courseLabels">
-          <div class="ui small green label difficultyLabel">{{resource.difficulty}}</div>
+
+          <div :class="this.$eval('resource.difficulty | difficultyColor')" class="ui small label difficultyLabel">{{resource.difficulty | difficulty}}</div>
+
           <div class="ui tiny blue label timeLabel">
             <i class=" video play outline icon typeIcon"></i>
-            {{resource.duration}}
+            {{resource.duration | duration}}
           </div>
+
         </div>
       </div>
     </div>
@@ -128,7 +135,7 @@
   }
 
   .ui.small.label.difficultyLabel {
-    margin-left: 40px;
+    margin-left: 8px;
   }
 
   .ui.tiny.basic.label.timeLabel {

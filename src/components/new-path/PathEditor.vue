@@ -1,128 +1,152 @@
 <template>
   <div>
 
-
-    <button @click="showModal()">asdas</button>
-
     <div class="ui modal inverted">
-      <div class="header">Edit resource</div>
+      <div class="header">
+        <i class="icon setting"></i>
+        Edit resource
+      </div>
       <div class="image content">
-        <img src="../../assets/img/logo1.png" class="ui medium rounded image bordered"/>
-        <div class="description">
+        <img width="400" src="../../assets/img/logo1.png" class="ui image rounded bordered"/>
+        <div class="description resource-settings">
+          <div class="ui header">Briefly describe the resource</div>
 
-          <p>
-          <div class="ui left icon input fluid">
-            <input type="text" placeholder="Search users...">
-            <i class="users icon"></i>
+          Title
+          <div class="ui left input fluid">
+            <input v-model="editedResource.title" type="text" placeholder="No title">
           </div>
-          </p>
-
-          <p>
+          <p></p>
+          Description
           <div class="ui form field fluid">
-            <textarea rows="2"></textarea>
+            <textarea v-model="editedResource.description" rows="2"></textarea>
           </div>
-          </p>
+          <p></p>
+          <div class="ui form">
+            <div class="two fields">
+              <div class="one field">
+                Difficulty
+                <div class="ui fluid selection dropdown">
+                  <input v-model="editedResource.difficulty" type="hidden" name="difficulty"/>
+                  <i class="dropdown icon"></i>
+                  <div class="default text">Difficulty</div>
+                  <div class="menu">
+                    <div class="item" data-value="beginner"><i class="icon child olive"></i>Beginner</div>
+                    <div class="item" data-value="medium"><i class="icon child green"></i>Medium</div>
+                    <div class="item" data-value="experienced"><i class="icon child yellow"></i>Experienced</div>
+                    <div class="item" data-value="expert"><i class="icon child orange"></i>Expert</div>
+                  </div>
+                </div>
+              </div>
 
-          <p>
-          <div class="ui form two fields">
-            <div class="field">
-              <div class="ui fluid search selection dropdown">
-                <input type="hidden" name="country"/>
-                <i class="dropdown icon"></i>
-                <div class="default text">Select Country</div>
-                <div class="menu">
-                  <div class="item" data-value="uk"><i class="icon child green"></i>Medium</div>
+              <div class="one field">
+                Duration
+                <div class="ui fluid selection dropdown">
+                  <input v-model="editedResource.duration" type="hidden" name="difficulty"/>
+                  <i class="dropdown icon"></i>
+                  <div class="default text">Duration</div>
+                  <div class="menu">
+                    <div class="item" data-value="5_min">5 min</div>
+                    <div class="item" data-value="15_min">15 min</div>
+                    <div class="item" data-value="30_min">30 min</div>
+                    <div class="item" data-value="1_hours">1+ hours</div>
+                    <div class="item" data-value="2_hours">2+ hours</div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="field">
-              <div class="ui fluid search selection dropdown">
-                <input type="hidden" name="country"/>
-                <i class="dropdown icon"></i>
-                <div class="default text">Select Country</div>
-                <div class="menu">
-                  <div class="item" data-value="uk"><i class="icon child green"></i>Medium</div>
-                </div>
-              </div>
-            </div>
           </div>
-          </p>
 
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui black deny button">
+          Cancel
+        </div>
+        <div @click="setChangedResource(editedResource._id, editedResource)"
+             class="ui positive right labeled icon button">
+          Set details
+          <i class="checkmark icon"></i>
         </div>
       </div>
     </div>
 
 
     <div class="ui secondary segment">
+
+      <h5 class="ui horizontal header divider">
+        <i class="icon write"></i>
+        Path details
+      </h5>
+
       <div class="ui form">
+        <div class="ui grid stackable">
 
-        <div class="three fields">
+          <div class="column eight wide">
+            <div class="field">
+              <input v-model="courseDetails.title" type="text" placeholder="Title"/>
+            </div>
 
-          <div class="field">
-            <label for="title">Title</label>
-            <input value="Javascript OOP from TelerikAcademy" type="text" id="title"/>
-          </div>
+            <div class="field">
+              <div class="ui fluid selection dropdown">
+                <input v-model="courseDetails.difficulty" type="hidden" name="difficulty"/>
+                <i class="dropdown icon"></i>
+                <div class="default text">Difficulty</div>
+                <div class="menu">
+                  <div class="item" data-value="beginner"><i class="icon child olive"></i>Beginner</div>
+                  <div class="item" data-value="medium"><i class="icon child green"></i>Medium</div>
+                  <div class="item" data-value="experienced"><i class="icon child yellow"></i>Experienced</div>
+                  <div class="item" data-value="expert"><i class="icon child orange"></i>Expert</div>
+                </div>
+              </div>
+            </div>
 
-          <div class="field">
-            <label>Difficulty</label>
-            <div class="ui fluid search selection dropdown">
-              <input type="hidden" name="country"/>
-              <i class="dropdown icon"></i>
-              <div class="default text">Select Country</div>
-              <div class="menu">
-                <div class="item" data-value="uk"><i class="icon child green"></i>Medium</div>
+            <div class="field">
+              <div class="ui fluid selection dropdown">
+                <input v-model="editedResource.duration" type="hidden" name="difficulty"/>
+                <i class="dropdown icon"></i>
+                <div class="default text">Duration</div>
+                <div class="menu">
+                  <div class="item" data-value="5_min">5 min</div>
+                  <div class="item" data-value="15_min">15 min</div>
+                  <div class="item" data-value="30_min">30 min</div>
+                  <div class="item" data-value="1_hours">1+ hours</div>
+                  <div class="item" data-value="2_hours">2+ hours</div>
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="field">
-            <label>Duration</label>
-            <div class="ui fluid search selection dropdown">
-              <input type="hidden" name="country"/>
-              <i class="dropdown icon"></i>
-              <div class="default text">Select Country</div>
-              <div class="menu">
-                <div class="item" data-value="uk"><i class="icon wait"></i>4 Hours</div>
-              </div>
+          <div class="column eight wide">
+            <div class="field">
+              <textarea v-model="courseDetails.description" rows="7" id="description"
+                        placeholder="Briefly describe the course."></textarea>
             </div>
           </div>
 
         </div>
-
-        <div class="field">
-          <label for="description">Brief description</label>
-          <textarea rows="2" id="description">
-            The purpose of this path is to give introduction to Object-oriented programming in JS. There are 3 videos that are going to get you familiar with the most useful concepts that we use to do OOP in JavaScript.
-          </textarea>
-        </div>
-
       </div>
+
+
     </div>
 
-    <button @click="addResource()">asds</button>
 
-    <input type="text" v-model="newTitle">
+    <div class="ui segment secondary">
+      <div class="ui grid stackable">
+        <div class="four wide column">
 
-    <div class="ui segment basic secondary">
-
-      <div class="ui grid">
-        <div class="three wide column">
-
-          <button class="ui blue icon large fluid button">
-            <i class="forward mail icon"></i>
-            &nbsp; Import
-          </button>
-
-        </div>
-        <div class="three wide column">
-
-          <button class="ui blue icon large fluid button">
-            <i class="file icon"></i>
-            &nbsp; Export
-          </button>
+          <div class="ui buttons large fluid">
+            <button class="ui blue basic icon button">
+              <i class="icon upload"></i>
+              Import
+            </button>
+            <button class="ui blue icon basic button">
+              <i class="icon save"></i>
+              Export
+            </button>
+          </div>
 
         </div>
-        <div class="six wide column">
+
+        <div class="eight wide column">
 
           <div class="ui action input large fluid">
             <input type="text" value="http://www.codestairs.com/edit/8c65be057885">
@@ -141,13 +165,15 @@
 
         </div>
       </div>
-
     </div>
 
+    <h5 class="ui horizontal header divider">
+      <i class="icon cubes"></i>
+      Resources
+    </h5>
     <div class="ui divider hidden"></div>
     <div class="ui divider hidden"></div>
     <div id="wrapper"></div>
-
 
   </div>
 </template>
@@ -158,29 +184,29 @@
   import generateUuid from '../../utils/uuid-generator';
   import DraggableGrid from '../../utils/draggable-grid';
   import _ from 'lodash';
+  import co from 'co';
 
   import resourcesBoxesStore from '../../store/resources-boxes';
 
+  import * as resourcesFetcher from '../../http-fetchers/resources';
 
   export default {
     name: 'PathEditor',
     data() {
       return {
-        tileToAddIndex: null,
-        tileToAddData: null,
-        tileToChangeIndex: null,
-        tileToChangeData: null,
-        tileToRemoveIndex: null,
+        courseDetails: {
+          title: '',
+          difficulty: 'medium',
+          duration: '',
+          description: ''
+        },
         boxesPerRow: null,
         resourcesBoxesStore: resourcesBoxesStore.state,
-        newTitle: ''
+        editedResource: {}
       }
     },
     props: ['resources'],
     ready() {
-
-
-//      this.showModal();
 
       $('.dropdown').dropdown({
         allowAdditions: true,
@@ -276,30 +302,36 @@
         return resources;
       },
 
-      addResource() {
+      addResource(url) {
         let self = this;
-        let resource = {
-          "_id": Math.random() + "",
-          "title": "random title" + Math.random(),
-          "description:": "random description"
-        };
 
-        // add the resource
-        this.resourcesBoxesStore.resources.push(resource);
+        console.log(url);
 
-        // save the plcaholder index
-        let placeholderIndex;
-
-        // change placeholder data to contain the resource
-        this.resourcesBoxesStore.order.forEach(function(key, index) {
-          if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
-            self.resourcesBoxesStore.boxesUuids[key] = resource._id;
-            placeholderIndex = index;
+        co(function *() {
+          try {
+            let resource = yield resourcesFetcher.addResource(url);
+            console.log(resource);
+          } catch (err) {
+            console.log(err);
           }
         });
 
-        // add new placeholder after the new resource
-        this.addPlaceholder(placeholderIndex + 1);
+//        // add the resource
+//        this.resourcesBoxesStore.resources.push(resource);
+//
+//        // save the plcaholder index
+//        let placeholderIndex;
+//
+//        // change placeholder data to contain the resource
+//        this.resourcesBoxesStore.order.forEach(function(key, index) {
+//          if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
+//            self.resourcesBoxesStore.boxesUuids[key] = resource._id;
+//            placeholderIndex = index;
+//          }
+//        });
+//
+//        // add new placeholder after the new resource
+//        this.addPlaceholder(placeholderIndex + 1);
       },
 
       addPlaceholder(index) {
@@ -310,8 +342,17 @@
       },
 
       changeResourceData(id, resourceData) {
+        this.editedResource = resourceData;
+        this.showModal();
+      },
+
+      setChangedResource(id, resourceData) {
         let indexOfResource = _.indexOf(this.resourcesBoxesStore.resources, _.find(this.resourcesBoxesStore.resources, {_id: id}));
-        console.log(indexOfResource);
+        let resourceToChange = this.resourcesBoxesStore.resources[indexOfResource];
+        resourceToChange.title = resourceData.title;
+        resourceToChange.description = resourceData.description;
+        resourceToChange.difficulty = resourceData.difficulty;
+        resourceToChange.duration = resourceData.duration;
       },
 
       removeResource(index) {
@@ -325,6 +366,7 @@
       },
 
       invalidateOrderAndPositions(order) {
+        this.centerWrapper();
         resourcesBoxesStore.setOrder(order);
 
         let self = this;
@@ -350,18 +392,29 @@
               },
 
               addResourceToPlaceholder(url) {
-                // todo get extracted resource and add
-                self.addResource();
+                self.addResource(url);
               },
 
               changeResourceDataFunction(id, resourceData) {
-                console.log(arguments);
                 self.changeResourceData(id, resourceData);
               }
 
             }
           }
         }).$mount().$appendTo($(el).get(0));
+      },
+
+      centerWrapper() {
+        let marginLeft;
+        if (this.resourcesBoxesStore.order.length < this.boxesPerRow) {
+          marginLeft = (this.$wrapper.outerWidth() - boxOptions.containerBoxWidth * this.resourcesBoxesStore.order.length) / 2 + boxOptions.horizontalArrowWidth / 2;
+        } else {
+          marginLeft = (this.$wrapper.outerWidth() - boxOptions.containerBoxWidth * this.boxesPerRow) / 2 + boxOptions.horizontalArrowWidth / 2;
+        }
+
+        this.$wrapper.css({
+          'margin-left': marginLeft + 'px'
+        });
       },
 
       calculateBoxesPerRow(wrapper) {
@@ -418,4 +471,9 @@
     padding: 0;
     font-weight: bold;
   }
+
+  .resource-settings {
+    width: 100% !important;
+  }
+
 </style>
