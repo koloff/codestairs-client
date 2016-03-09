@@ -10,10 +10,11 @@ export default Vue.extend({
   <div class="container-box">
     <div class="content-box">
 
+      {{index}}
 
 
-      <mini-resource-details-box v-if="isResource" :index="index" :resource="resource"></mini-resource-details-box>
-      <insert-resource-box v-if="isPlaceholder"></insert-resource-box>
+      <mini-resource-details-box v-if="isResource" :index="index" :resource="resource" :box-methods="boxMethods"></mini-resource-details-box>
+      <insert-resource-box v-if="!isResource" :box-methods="boxMethods"></insert-resource-box>
 
 
     <img class="arrow" src="../../assets/img/arrow.png" alt="next">
@@ -33,7 +34,7 @@ export default Vue.extend({
       index: null,
       isPlaceholder: false,
       isResource: false,
-      resource: {},
+      resource: undefined,
       resourcesBoxesState: resourcesBoxesStore.state
     };
   },
@@ -56,28 +57,28 @@ export default Vue.extend({
       }
     },
     isResource: function() {
-      console.log('calculating if resource');
-      let isResource = this.resourcesBoxesState.boxesUuids[this.boxUuid] !== '$$placeholder$$';
-      if (isResource) {
-        console.log('is resource calc');
-        let self = this;
-        console.log(self.getBoxData());
-        this.resource = _.find(this.resourcesBoxesState.resources, {_id: self.getBoxData()});
-      }
-      return this.resourcesBoxesState.boxesUuids[this.boxUuid] !== '$$placeholder$$';
+      return $pure(this.resource) !== undefined;
     },
-    isPlaceholder: function() {
-      return this.resourcesBoxesState.boxesUuids[this.boxUuid] === '$$placeholder$$';
+
+    resource() {
+      let self = this;
+
+      // needs to refer resources outside function scope
+      // for vue to calculate the computed property correctly :D
+      this.resourcesBoxesState.resources;
+
+      let isResource = this.resourcesBoxesState.boxesUuids[this.boxUuid] !== '$$placeholder$$';
+
+      if (isResource) {
+        return _.find(this.resourcesBoxesState.resources, {_id: self.getBoxData()});
+      } else {
+        return undefined;
+      }
     }
   },
-
   methods: {
     getBoxData() {
-      console.log('box data');
       let boxData = this.resourcesBoxesState.boxesUuids[this.boxUuid];
-      console.log(this.resourcesBoxesState.boxesUuids);
-      console.log(this.boxUuid);
-      console.log(boxData);
       return boxData;
     },
 

@@ -13,11 +13,14 @@
         <div class="courseText">
 
           <div class="ui mini icon inverted buttons closeAndEdit">
-            <button class="ui mini inverted red button removeButton"><i class="remove icon"></i>
+            <button @click="removeResource(index)" class="ui mini inverted red button removeButton"><i class="remove icon"></i>
               <button class="ui mini inverted grey button"><i class="setting icon editIcon"></i></button>
             </button>
           </div>
 
+          <input v-model="resourceData" type="text">
+          <button @click="changeResourceData(resource._id, resourceData)"></button>
+          
           <h4 class="ui header courseHeader">{{resource.title}}</h4>
           <div class="courseDescription description">
             {{resource.description}}
@@ -38,7 +41,21 @@
 <script>
   export default{
     name: 'MiniResourceDetailsBox',
-    props: ['index', 'resource']
+    props: ['index', 'resource', 'boxMethods'],
+    data() {
+      return {
+        resourceData: ''
+      };
+    },
+    methods: {
+      removeResource(index) {
+        index = index | 0;
+        this.boxMethods.removeResourceFunction(index);
+      },
+      changeResourceData(id, resourceData) {
+        this.boxMethods.changeResourceDataFunction(id, resourceData);
+      }
+    }
   };
 </script>
 

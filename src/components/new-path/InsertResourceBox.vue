@@ -5,11 +5,16 @@
       <div class="add-box">
 
         <div class="ui left icon input">
-          <input type="text" placeholder="www.resource.com">
+          <input data-clickable="true"
+                 @click="click($event)"
+                 type="text"
+                 placeholder="www.resource.com"
+                 class="url-input"/>
+
           <i class="world icon"></i>
         </div>
 
-        <button class="ui primary button ">
+        <button data-clickable="true" @click="addClicked(url)" class="ui primary button ">
           Add
         </button>
 
@@ -20,7 +25,40 @@
 
 <script>
   export default {
-    name: 'InsertResourceBox'
+    name: 'InsertResourceBox',
+    props: ['boxMethods'],
+    data() {
+      return {
+        url: ''
+      };
+    },
+    ready() {
+
+
+
+//      $('.url-input').on('input', function() {
+//        var e = $.Event('keypress');
+//        e.which = 13; // Character 'A'
+//        $('.url-input').trigger(e);
+//      });
+
+    },
+    methods: {
+      click(event) {
+        //        console.log(event);
+        //        event.target.focus();
+        //        event.preventDefault();
+        //        event.stopPropagation();
+      },
+
+      change() {
+        console.log('changed');
+      },
+
+      addClicked(url) {
+        this.boxMethods.addResourceToPlaceholder(url);
+      }
+    }
   }
 </script>
 
@@ -28,4 +66,5 @@
   .add-box {
     padding: 55px 0 0 37px;
   }
+
 </style>

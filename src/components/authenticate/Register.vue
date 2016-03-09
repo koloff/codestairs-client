@@ -2,7 +2,6 @@
   <div>
 
     <validator name="validation">
-
       <div class="ui form error">
 
         <div class="dividing teal ui  header">

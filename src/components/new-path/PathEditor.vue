@@ -1,6 +1,56 @@
 <template>
   <div>
-    <div id="test"></div>
+
+
+    <button @click="showModal()">asdas</button>
+
+    <div class="ui modal inverted">
+      <div class="header">Edit resource</div>
+      <div class="image content">
+        <img src="../../assets/img/logo1.png" class="ui medium rounded image bordered"/>
+        <div class="description">
+
+          <p>
+          <div class="ui left icon input fluid">
+            <input type="text" placeholder="Search users...">
+            <i class="users icon"></i>
+          </div>
+          </p>
+
+          <p>
+          <div class="ui form field fluid">
+            <textarea rows="2"></textarea>
+          </div>
+          </p>
+
+          <p>
+          <div class="ui form two fields">
+            <div class="field">
+              <div class="ui fluid search selection dropdown">
+                <input type="hidden" name="country"/>
+                <i class="dropdown icon"></i>
+                <div class="default text">Select Country</div>
+                <div class="menu">
+                  <div class="item" data-value="uk"><i class="icon child green"></i>Medium</div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui fluid search selection dropdown">
+                <input type="hidden" name="country"/>
+                <i class="dropdown icon"></i>
+                <div class="default text">Select Country</div>
+                <div class="menu">
+                  <div class="item" data-value="uk"><i class="icon child green"></i>Medium</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </p>
+
+        </div>
+      </div>
+    </div>
 
 
     <div class="ui secondary segment">
@@ -49,8 +99,11 @@
       </div>
     </div>
 
-    <div class="ui segment basic secondary">
+    <button @click="addResource()">asds</button>
 
+    <input type="text" v-model="newTitle">
+
+    <div class="ui segment basic secondary">
 
       <div class="ui grid">
         <div class="three wide column">
@@ -68,7 +121,6 @@
             &nbsp; Export
           </button>
 
-
         </div>
         <div class="six wide column">
 
@@ -83,29 +135,14 @@
         </div>
         <div class="four wide column">
 
-          <button class="ui right fluid button large  green">
+          <button @click="getResourcesInOrder()" class="ui right fluid button large  green">
             Save
           </button>
 
         </div>
       </div>
 
-
     </div>
-    <!--<h1>add placeholder</h1>-->
-    <!--index-->
-    <!--<input type="text" v-model="tileToAddIndex"/>-->
-    <!--<button @click="addPlaceholder(tileToAddIndex)">add</button>-->
-
-    <!--<h1>remove tile</h1>-->
-    <!--index <input type="text" v-model="tileToRemoveIndex"/>-->
-    <!--<button @click="removeResource(tileToRemoveIndex)">remove</button>-->
-    <!--<div id="wrapper"></div>-->
-
-    <!--<h1>change tile data</h1>-->
-    <!--index <input type="text" v-model="tileToChangeIndex"/>-->
-    <!--data <input type="text" v-model="tileToChangeData"/>-->
-    <!--<button @click="changeBoxData(tileToChangeIndex, tileToChangeData)">change</button>-->
 
     <div class="ui divider hidden"></div>
     <div class="ui divider hidden"></div>
@@ -120,6 +157,7 @@
   import boxOptions from './box-options';
   import generateUuid from '../../utils/uuid-generator';
   import DraggableGrid from '../../utils/draggable-grid';
+  import _ from 'lodash';
 
   import resourcesBoxesStore from '../../store/resources-boxes';
 
@@ -134,11 +172,15 @@
         tileToChangeData: null,
         tileToRemoveIndex: null,
         boxesPerRow: null,
-        resourcesBoxesStore: resourcesBoxesStore.state
+        resourcesBoxesStore: resourcesBoxesStore.state,
+        newTitle: ''
       }
     },
     props: ['resources'],
     ready() {
+
+
+//      this.showModal();
 
       $('.dropdown').dropdown({
         allowAdditions: true,
@@ -146,8 +188,6 @@
       });
 
       let self = this;
-
-      resourcesBoxesStore.setResources(this.resources);
 
       // generates uuid hash set for each resource in order to save their order
       // adds one extra uuid in the end for the "add new resource" placeholder
@@ -166,10 +206,9 @@
           boxesOrder.push(uuid);
         }
       }
-      console.log('bioxes order');
-      console.log(boxesOrder);
 
       // set to store
+      resourcesBoxesStore.setResources(this.resources);
       resourcesBoxesStore.setOrder(boxesOrder);
       resourcesBoxesStore.setBoxesUuids(resourceUuids);
 
@@ -179,8 +218,8 @@
       this.$wrapper = $wrapper;
       this.$wrapper.css({
         position: 'relative',
-//        left: `-${boxOptions.horizontalArrowWidth}px`
-        left: '100px'
+        left: `-${boxOptions.horizontalArrowWidth}px`
+        //        left: '100px'
       });
 
 
@@ -191,26 +230,19 @@
         width: boxOptions.containerBoxWidth,
         height: boxOptions.containerBoxHeight,
         onAdded(index, el, order) {
-          console.log('added');
-          console.log(order);
-          console.log(index);
           self.invalidateOrderAndPositions(order.slice());
           self.mountBox(order[index], el);
         },
         onMoved (order) {
-          console.log('moved');
           self.invalidateOrderAndPositions(order.slice());
         },
         onRemoved(order) {
-          console.log('removed');
           self.invalidateOrderAndPositions(order.slice());
         },
         onChangedData(order) {
-          console.log('data changed');
           self.invalidateOrderAndPositions(order.slice());
         },
         onNewLayout(order) {
-          console.log('new layout');
           // how many boxes can fin in a row in the wrapper
           self.boxesPerRow = self.calculateBoxesPerRow(self.$wrapper);
           self.invalidateOrderAndPositions(order.slice());
@@ -220,18 +252,55 @@
     },
     methods: {
 
-      invalidateOrderAndPositions(order) {
-        console.log('invalidation');
-
-        resourcesBoxesStore.setOrder(order.slice());
-
-        let self = this;
-        let positions = self.resourcesBoxesStore.order.map(function(boxUuid, index) {
-          return self.calculateBoxPosition(index, self.boxesPerRow, self.calculateBoxRow(index, self.boxesPerRow));
-        });
-        resourcesBoxesStore.setBoxesPositions(positions);
+      showModal() {
+        $('.ui.modal')
+          .modal({
+            blurring: true
+          })
+          .modal('show');
       },
 
+      getResourcesInOrder() {
+        console.log('gettiing ordered resources');
+        let self = this;
+        let resources = [];
+        this.resourcesBoxesStore.order.forEach(function(uuid) {
+          let boxId = self.resourcesBoxesStore.boxesUuids[uuid];
+          if (boxId !== self.placeholder) {
+            let resource = _.find(self.resourcesBoxesStore.resources, {_id: boxId});
+            resources.push(resource);
+          }
+        });
+
+        console.log(resources);
+        return resources;
+      },
+
+      addResource() {
+        let self = this;
+        let resource = {
+          "_id": Math.random() + "",
+          "title": "random title" + Math.random(),
+          "description:": "random description"
+        };
+
+        // add the resource
+        this.resourcesBoxesStore.resources.push(resource);
+
+        // save the plcaholder index
+        let placeholderIndex;
+
+        // change placeholder data to contain the resource
+        this.resourcesBoxesStore.order.forEach(function(key, index) {
+          if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
+            self.resourcesBoxesStore.boxesUuids[key] = resource._id;
+            placeholderIndex = index;
+          }
+        });
+
+        // add new placeholder after the new resource
+        this.addPlaceholder(placeholderIndex + 1);
+      },
 
       addPlaceholder(index) {
         index = index | 0;
@@ -240,11 +309,29 @@
         this.draggableGrid.add(index, uuid);
       },
 
+      changeResourceData(id, resourceData) {
+        let indexOfResource = _.indexOf(this.resourcesBoxesStore.resources, _.find(this.resourcesBoxesStore.resources, {_id: id}));
+        console.log(indexOfResource);
+      },
+
       removeResource(index) {
-        // todo remove from hash
         index = index | 0;
-        resourcesBoxesStore.state.order.splice(index, 1);
+        let removedUuid = resourcesBoxesStore.state.order.splice(index, 1);
+        let resourceId = resourcesBoxesStore.state.boxesUuids[removedUuid];
+
+        delete resourcesBoxesStore.state.boxesUuids[removedUuid];
+        _.remove(resourcesBoxesStore.state.resources, {'_id': resourceId});
         this.draggableGrid.remove(index);
+      },
+
+      invalidateOrderAndPositions(order) {
+        resourcesBoxesStore.setOrder(order);
+
+        let self = this;
+        let positions = self.resourcesBoxesStore.order.map(function(boxUuid, index) {
+          return self.calculateBoxPosition(index, self.boxesPerRow, self.calculateBoxRow(index, self.boxesPerRow));
+        });
+        resourcesBoxesStore.setBoxesPositions(positions);
       },
 
       mountBox(boxUuid, el) {
@@ -256,8 +343,20 @@
             // dynamically bounded components can't use the event system, so we pass some methods
             boxMethods: {
 
-              removeBoxFunction: function(index) {
+              removeResourceFunction: function(index) {
+                console.log('removing resource index');
+                console.log(index);
                 self.removeResource(index);
+              },
+
+              addResourceToPlaceholder(url) {
+                // todo get extracted resource and add
+                self.addResource();
+              },
+
+              changeResourceDataFunction(id, resourceData) {
+                console.log(arguments);
+                self.changeResourceData(id, resourceData);
               }
 
             }

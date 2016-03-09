@@ -98,8 +98,6 @@ export default function DraggableGrid(options) {
   //  CREATE TILE
   // ========================================================================
   function createTile(index, data) {
-    console.log('creating tile shit');
-    console.log(arguments);
     index = index || 0;
 
     var element = $("<div></div>").addClass("tile");
@@ -108,8 +106,7 @@ export default function DraggableGrid(options) {
     Draggable.create(element, {
       onDrag: onDrag,
       onPress: onPress,
-      onRelease: onRelease,
-      zIndexBoost: false
+      onRelease: onRelease
     });
 
     // NOTE: Leave rowspan set to 1 because this
@@ -141,27 +138,66 @@ export default function DraggableGrid(options) {
     }
     else {
       let elementToInsertAfter = $('.tile').get(index - 1);
-      console.log('el to insert after');
-      console.log(elementToInsertAfter);
       element.insertAfter(elementToInsertAfter);
     }
 
     layoutInvalidated();
 
+
+    // checks if given coordinates are inside particular element
+    function isInBounds(posX, posY, elX, elY, elWidth, elHeight) {
+      //console.log(arguments);
+      let isInHorizontal = (posX >= elX) && (posX <= elX + elWidth);
+      //console.log('is horizontal', isInHorizontal);
+      let isInVertical = (posY >= elY) && (posY <= elY + elHeight);
+
+      return isInHorizontal && isInVertical;
+    }
+
     function onPress() {
+      console.log('press');
+      console.log(this);
+
+
+      let posX = this.pointerEvent.pageX;
+      let posY = this.pointerEvent.pageY;
+
+      // check if we clicked a clickable element
+      let isClickable = false;
+      $(this.target).find('*').each(function(index, el) {
+        let $el = $(el);
+
+        let elOffset = $el.offset();
+
+
+        let inBounds = isInBounds(posX, posY, elOffset.left, elOffset.top, $el.outerWidth(), $el.outerHeight());
+        //console.log(inBounds);
+        //console.log($el[0]);
+
+        if (inBounds && $el.attr('data-clickable') === 'true') {
+          isClickable = true;
+        }
+      });
+
+      if (isClickable) {
+        return;
+      }
+
+      $(this.target).find('input').blur();
 
       lastX = this.x;
-      tile.isDragging = true;
       tile.lastIndex = tile.index;
+      tile.isDragging = true;
+    }
+
+    function onDrag() {
+      console.log('drag');
 
       TweenLite.to(element, 0.2, {
         autoAlpha: 0.75,
         scale: 0.95,
         zIndex: "+=1000"
       });
-    }
-
-    function onDrag() {
 
       // Move to end of list if not in bounds
       if (!this.hitTest($list, 0)) {
@@ -194,6 +230,10 @@ export default function DraggableGrid(options) {
     }
 
     function onRelease() {
+
+      console.log('release');
+
+      console.log(this);
 
       // Move tile back to last position if released out of bounds
       this.hitTest($list, 0)
@@ -363,8 +403,7 @@ export default function DraggableGrid(options) {
       timeline.to($list, 0.2, {height: height}, "reflow");
     }
 
-    console.log('invalidateshit order');
-    console.log(getOrder());
+
     onNewLayout(getOrder());
   }
 

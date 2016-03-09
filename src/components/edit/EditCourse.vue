@@ -142,7 +142,6 @@
 
             if (!added) {
               self.resources.push(result);
-              console.log(self.resources);
             } else {
               notifier('information', 'This resource is already added');
             }
