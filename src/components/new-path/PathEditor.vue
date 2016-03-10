@@ -3,6 +3,7 @@
 
     <div class="ui modal inverted">
       <div class="header">
+        {{editedResource | json}}
         <i class="icon setting"></i>
         Edit resource
       </div>
@@ -25,8 +26,8 @@
             <div class="two fields">
               <div class="one field">
                 Difficulty
-                <div class="ui fluid selection dropdown">
-                  <input v-model="editedResource.difficulty" type="hidden" name="difficulty"/>
+                <div id="edited-difficulty" class="ui fluid selection dropdown">
+                  <input v-model="editedResource.difficulty" value="{{editedResource.difficulty}}" type="hidden" name="difficulty"/>
                   <i class="dropdown icon"></i>
                   <div class="default text">Difficulty</div>
                   <div class="menu">
@@ -40,8 +41,8 @@
 
               <div class="one field">
                 Duration
-                <div class="ui fluid selection dropdown">
-                  <input v-model="editedResource.duration" type="hidden" name="difficulty"/>
+                <div id="edited-duration" class="ui fluid selection dropdown">
+                  <input id="edited-duration" v-model="editedResource.duration" value="{{editedResource.duration}}" type="hidden" name="difficulty"/>
                   <i class="dropdown icon"></i>
                   <div class="default text">Duration</div>
                   <div class="menu">
@@ -167,6 +168,7 @@
       </div>
     </div>
 
+
     <h5 class="ui horizontal header divider">
       <i class="icon cubes"></i>
       Resources
@@ -208,10 +210,7 @@
     props: ['resources'],
     ready() {
 
-      $('.dropdown').dropdown({
-        allowAdditions: true,
-        useLabels: true
-      });
+      $('.dropdown').dropdown();
 
       let self = this;
 
@@ -305,33 +304,41 @@
       addResource(url) {
         let self = this;
 
-        console.log(url);
-
         co(function *() {
-          try {
-            let resource = yield resourcesFetcher.addResource(url);
-            console.log(resource);
-          } catch (err) {
-            console.log(err);
-          }
+//          try {
+            let response = yield resourcesFetcher.addResource(url);
+            console.log(response);
+            let resource = response.resource;
+
+            // set default values
+            resource.difficulty = resource.difficulty || 'medium';
+            resource.duration = resource.duration || '15_min';
+
+            // add the resource
+            self.resourcesBoxesStore.resources.push(resource);
+
+            // save the plcaholder index
+            let placeholderIndex;
+
+            // change placeholder data to contain the resource
+            self.resourcesBoxesStore.order.forEach(function(key, index) {
+              if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
+                self.resourcesBoxesStore.boxesUuids[key] = resource._id;
+                placeholderIndex = index;
+              }
+            });
+
+            // add new placeholder after the new resource
+            if (placeholderIndex !== undefined) {
+              self.addPlaceholder(placeholderIndex + 1);
+            }
+
+//          } catch (err) {
+//            console.log('error');
+//            console.log(err);
+//          }
         });
 
-//        // add the resource
-//        this.resourcesBoxesStore.resources.push(resource);
-//
-//        // save the plcaholder index
-//        let placeholderIndex;
-//
-//        // change placeholder data to contain the resource
-//        this.resourcesBoxesStore.order.forEach(function(key, index) {
-//          if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
-//            self.resourcesBoxesStore.boxesUuids[key] = resource._id;
-//            placeholderIndex = index;
-//          }
-//        });
-//
-//        // add new placeholder after the new resource
-//        this.addPlaceholder(placeholderIndex + 1);
       },
 
       addPlaceholder(index) {
@@ -343,6 +350,8 @@
 
       changeResourceData(id, resourceData) {
         this.editedResource = resourceData;
+        $('#edited-difficulty').dropdown('set selected', resourceData.difficulty);
+        $('#edited-duration').dropdown('set selected', resourceData.duration);
         this.showModal();
       },
 

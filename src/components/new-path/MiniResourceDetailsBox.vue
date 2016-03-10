@@ -27,6 +27,7 @@
           <h4 class="ui header courseHeader">{{resource.title}}</h4>
           <div class="courseDescription description">
             {{resource.description}}
+            <div v-if="!resource.description">No description.</div>
           </div>
         </div>
 
