@@ -32,6 +32,8 @@ export function getMultiple(start, count) {
       count: count
     };
 
+    console.log('getting multiple resources');
+
     request
       .get(`${api}/resources`)
       .query(query)

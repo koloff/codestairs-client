@@ -37,19 +37,16 @@
     </div>
 
     <div v-if="currentView === 'courses'">
-      <div class="ui cards stackable doubling four">
-        <mini-path
-          v-for="course in courses"
-          :_id="course._id"
-          :date-added="course.dateAdded"
-          :title="course.title"
-          :description="course.description"
-          :resources-count="course.resources.length"
-          :difficulty="course.difficulty"
-          :duration="course.duration"
-          :rating="course.rating"
-        ></mini-path>
-      </div>
+      
+      <mini-course
+        v-for="course in courses"
+        :id="course._id"
+        :title="course.title"
+        :description="course.description"
+        :resources="course.resources"
+        :rating="course.rating"
+      ></mini-course>
+      
     </div>
 
   </div>
@@ -60,14 +57,13 @@
   import co from 'co';
   import Search from './Search.vue';
   import MiniResource from '../views-resources/MiniResource.vue';
-  import MiniPath from '../views-paths/MiniPath.vue';
+  import MiniCourse from '../views-paths/MiniPath.vue';
 
   import {fetchResourcesSearch} from '../../store/resources';
   import {fetchCoursesSearch} from '../../store/courses';
 
 
   import * as resourcesFetcher from '../../http-fetchers/resources';
-  import * as pathsFetcher from '../../http-fetchers/paths';
   import * as searchFetcher from '../../http-fetchers/search';
 
   export default {
@@ -75,7 +71,7 @@
     components: {
       Search,
       MiniResource,
-      MiniPath
+      MiniCourse
     },
     data() {
       return {
@@ -92,17 +88,19 @@
 
     route: {
       data() {
-        let viewRoute = this.$route.fullPath === '/resources' ? 'resources' : 'courses';
-        console.log(viewRoute);
+        let viewRoute = this.$route.params.view;
+        if (viewRoute !== 'resources' && viewRoute !== 'courses') {
+          this.$route.router.go('/resources');
+        }
 
-        console.log(this.$route);
-        this.currentView = viewRoute;
+        this.currentView = this.$route.params.view;
         console.log('current view');
         console.log(this.currentView);
 
         if (this.$route.query.search) {
-          console.log('query search found');
+          console.log('query search foundddd');
           this.searchPhrase = this.$route.query.search;
+          console.log(this.$route.query.search);
         }
         this.loadNeededData();
       }
@@ -119,6 +117,7 @@
             let self = this;
             co(function *() {
               try {
+                console.log('hereee');
                 let result = yield resourcesFetcher.getMultiple(0, 16);
                 self.resources = result;
                 console.log($pure(self.resources));
@@ -136,7 +135,7 @@
             let self = this;
             co(function *() {
               try {
-                let result = yield pathsFetcher.getMultiple(0, 16);
+                let result = yield coursesFetcher.getMultiple(0, 16);
                 self.courses = result;
                 console.log($pure(self.courses));
               } catch (err) {
@@ -189,9 +188,7 @@
       },
 
       changeRoute() {
-        console.log('changing route');
         let route = `/${this.currentView}`;
-        console.log(route);
         // if search is specified, save it
         if (this.searchPhrase !== '' && this.searchPhrase !== ' ') {
           route += `?search=${this.searchPhrase}`;

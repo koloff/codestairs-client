@@ -1,19 +1,22 @@
 export default function(router) {
 
   router.map({
-    '/:view': {
+    '/resources': {
+      component: require('./components/home/Home.vue')
+    },
+    '/courses': {
       component: require('./components/home/Home.vue')
     },
     '/add-resource': {
       component: require('./components/add/AddResource.vue')
     },
-    'new': {
+    '/new': {
       component: require('./components/new-path/NewPathPage.vue')
     },
-    'paths': {
+    '/paths': {
       component: require('./components/paths/PathsView.vue')
     },
-    'requests': {
+    '/requests': {
       component: require('./components/requests/RequestsPage.vue')
     },
     'requests/:requestId': {
@@ -33,6 +36,9 @@ export default function(router) {
     },
     '/about': {
       component: require('./components/info/About.vue')
+    },
+    '/:pathId': {
+      component: require('./components/views-paths/PathPage.vue')
     }
   });
 

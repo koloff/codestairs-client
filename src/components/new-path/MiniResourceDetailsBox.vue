@@ -4,7 +4,7 @@
       <div class="courseCard">
         <div class="courseScreenshot">
           <div href="http://google.com" class="ui small courseImage image">
-            <img class="courseShot" :src="'../../assets/img/mockups/img/' + resource.screenshotName"/>
+            <img class="courseShot" :src="resourcesScreenshotsUrl + '/' + resource.screenshotFile"/>
           </div>
         </div>
 
@@ -47,12 +47,15 @@
 </template>
 
 <script>
+  import {resourcesScreenshotsUrl} from '../../config';
+  
   export default{
     name: 'MiniResourceDetailsBox',
     props: ['index', 'resource', 'boxMethods'],
     data() {
       return {
-        resourceData: ''
+        resourceData: '',
+        resourcesScreenshotsUrl: resourcesScreenshotsUrl
       };
     },
     methods: {

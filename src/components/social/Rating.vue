@@ -21,10 +21,6 @@
       }
     },
     ready() {
-      console.log('rating id:', this.id);
-      console.log('rating type', this.type);
-      console.log('rating value', this.value);
-      console.log('count', this.count);
 
       let self = this;
       $(`#${self.id}`).rating({

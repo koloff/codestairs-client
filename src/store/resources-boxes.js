@@ -3,7 +3,8 @@ export default {
     resources: [],
     boxesUuids: {},
     order: [],
-    boxesPositions: []
+    boxesPositions: [],
+    extractingLoading: false
   },
 
   clearState() {

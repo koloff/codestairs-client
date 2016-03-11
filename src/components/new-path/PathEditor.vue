@@ -1,63 +1,100 @@
 <template>
   <div>
 
-    <div class="ui modal inverted">
+    <div id="resource-saved" class="ui basic modal">
+      <div class="ui icon header">
+        <i class="checkmark icon"></i>
+        The path was saved!
+      </div>
+      <div class="content">
+        <p>You can edit it from this unique URL:</p>
+        <p>
+        <div class="ui action input fluid">
+          <input type="text" value="http://www.codestairs.com/edit/{{pathDetails.editId}}" readonly>
+          <button class="ui blue right labeled icon button">
+            <i class="copy icon"></i>
+            Edit URL
+          </button>
+        </div>
+        </p>
+      </div>
+      <div class="actions">
+        <div class="ui green ok inverted button">
+          <i class="checkmark icon"></i>
+          Ok, I got it!
+        </div>
+      </div>
+    </div>
+
+    <!--modal edit resource details-->
+    <div id="edit-resource" class="ui modal inverted">
       <div class="header">
-        {{editedResource | json}}
         <i class="icon setting"></i>
         Edit resource
       </div>
-      <div class="image content">
-        <img width="400" src="../../assets/img/logo1.png" class="ui image rounded bordered"/>
-        <div class="description resource-settings">
-          <div class="ui header">Briefly describe the resource</div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="ui column seven wide">
+            <img
+              :src="editedResource.screenshotFile ? resourcesScreenshotsUrl + '/' + editedResource.screenshotFile : ''"
+              class="ui fluid rounded bordered image"/>
 
-          Title
-          <div class="ui left input fluid">
-            <input v-model="editedResource.title" type="text" placeholder="No title">
           </div>
-          <p></p>
-          Description
-          <div class="ui form field fluid">
-            <textarea v-model="editedResource.description" rows="2"></textarea>
-          </div>
-          <p></p>
-          <div class="ui form">
-            <div class="two fields">
-              <div class="one field">
-                Difficulty
-                <div id="edited-difficulty" class="ui fluid selection dropdown">
-                  <input v-model="editedResource.difficulty" value="{{editedResource.difficulty}}" type="hidden" name="difficulty"/>
-                  <i class="dropdown icon"></i>
-                  <div class="default text">Difficulty</div>
-                  <div class="menu">
-                    <div class="item" data-value="beginner"><i class="icon child olive"></i>Beginner</div>
-                    <div class="item" data-value="medium"><i class="icon child green"></i>Medium</div>
-                    <div class="item" data-value="experienced"><i class="icon child yellow"></i>Experienced</div>
-                    <div class="item" data-value="expert"><i class="icon child orange"></i>Expert</div>
-                  </div>
-                </div>
+          <div class="ui column nine wide">
+            <div class="description resource-settings">
+              <div class="ui header">Briefly describe the resource</div>
+
+              Title
+              <div class="ui left input fluid">
+                <input v-model="editedResource.title" type="text" placeholder="No title">
               </div>
+              <p></p>
+              Description
+              <div class="ui form field fluid">
+                <textarea v-model="editedResource.description" rows="2"></textarea>
+              </div>
+              <p></p>
+              <div class="ui form">
+                <div class="two fields">
+                  <div class="one field">
+                    Difficulty
+                    <div id="edited-difficulty" class="ui fluid selection dropdown">
+                      <input v-model="editedResource.difficulty" value="{{editedResource.difficulty}}" type="hidden"
+                             name="difficulty"/>
+                      <i class="dropdown icon"></i>
+                      <div class="default text">Difficulty</div>
+                      <div class="menu">
+                        <div class="item" data-value="beginner"><i class="icon child olive"></i>Beginner</div>
+                        <div class="item" data-value="medium"><i class="icon child green"></i>Medium</div>
+                        <div class="item" data-value="experienced"><i class="icon child yellow"></i>Experienced</div>
+                        <div class="item" data-value="expert"><i class="icon child orange"></i>Expert</div>
+                      </div>
+                    </div>
+                  </div>
 
-              <div class="one field">
-                Duration
-                <div id="edited-duration" class="ui fluid selection dropdown">
-                  <input id="edited-duration" v-model="editedResource.duration" value="{{editedResource.duration}}" type="hidden" name="difficulty"/>
-                  <i class="dropdown icon"></i>
-                  <div class="default text">Duration</div>
-                  <div class="menu">
-                    <div class="item" data-value="5_min">5 min</div>
-                    <div class="item" data-value="15_min">15 min</div>
-                    <div class="item" data-value="30_min">30 min</div>
-                    <div class="item" data-value="1_hours">1+ hours</div>
-                    <div class="item" data-value="2_hours">2+ hours</div>
+                  <div class="one field">
+                    Duration
+                    <div id="edited-duration" class="ui fluid selection dropdown">
+                      <input id="edited-duration" v-model="editedResource.duration" value="{{editedResource.duration}}"
+                             type="hidden" name="difficulty"/>
+                      <i class="dropdown icon"></i>
+                      <div class="default text">Duration</div>
+                      <div class="menu">
+                        <div class="item" data-value="5_min">5 min</div>
+                        <div class="item" data-value="15_min">15 min</div>
+                        <div class="item" data-value="30_min">30 min</div>
+                        <div class="item" data-value="1_hours">1+ hours</div>
+                        <div class="item" data-value="2_hours">2+ hours</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
+
+
       </div>
       <div class="actions">
         <div class="ui black deny button">
@@ -72,6 +109,7 @@
     </div>
 
 
+    <!--path details-->
     <div class="ui secondary segment">
 
       <h5 class="ui horizontal header divider">
@@ -84,12 +122,12 @@
 
           <div class="column eight wide">
             <div class="field">
-              <input v-model="courseDetails.title" type="text" placeholder="Title"/>
+              <input v-model="pathDetails.title" type="text" placeholder="Title"/>
             </div>
 
             <div class="field">
               <div class="ui fluid selection dropdown">
-                <input v-model="courseDetails.difficulty" type="hidden" name="difficulty"/>
+                <input v-model="pathDetails.difficulty" type="hidden" name="difficulty"/>
                 <i class="dropdown icon"></i>
                 <div class="default text">Difficulty</div>
                 <div class="menu">
@@ -103,7 +141,7 @@
 
             <div class="field">
               <div class="ui fluid selection dropdown">
-                <input v-model="editedResource.duration" type="hidden" name="difficulty"/>
+                <input v-model="pathDetails.duration" type="hidden" name="difficulty"/>
                 <i class="dropdown icon"></i>
                 <div class="default text">Duration</div>
                 <div class="menu">
@@ -118,7 +156,7 @@
           </div>
           <div class="column eight wide">
             <div class="field">
-              <textarea v-model="courseDetails.description" rows="7" id="description"
+              <textarea v-model="pathDetails.description" rows="7" id="description"
                         placeholder="Briefly describe the course."></textarea>
             </div>
           </div>
@@ -130,11 +168,12 @@
     </div>
 
 
+    <!--buttons-->
     <div class="ui segment secondary">
       <div class="ui grid stackable">
         <div class="four wide column">
 
-          <div class="ui buttons large fluid">
+          <div class="ui buttons fluid">
             <button class="ui blue basic icon button">
               <i class="icon upload"></i>
               Import
@@ -149,8 +188,8 @@
 
         <div class="eight wide column">
 
-          <div class="ui action input large fluid">
-            <input type="text" value="http://www.codestairs.com/edit/8c65be057885">
+          <div class="ui action input fluid">
+            <input type="text" value="http://www.codestairs.com/edit/{{pathDetails.editId}}" readonly>
             <button class="ui blue right labeled icon button">
               <i class="copy icon"></i>
               Edit URL
@@ -160,7 +199,7 @@
         </div>
         <div class="four wide column">
 
-          <button @click="getResourcesInOrder()" class="ui right fluid button large  green">
+          <button @click="savePath()" class="ui right fluid button  green">
             Save
           </button>
 
@@ -173,35 +212,44 @@
       <i class="icon cubes"></i>
       Resources
     </h5>
+
     <div class="ui divider hidden"></div>
     <div class="ui divider hidden"></div>
     <div id="wrapper"></div>
+
 
   </div>
 </template>
 
 <script>
+  import {resourcesScreenshotsUrl} from '../../config';
   import Box from './box-component.js';
   import boxOptions from './box-options';
   import generateUuid from '../../utils/uuid-generator';
   import DraggableGrid from '../../utils/draggable-grid';
   import _ from 'lodash';
   import co from 'co';
+  import shortid from 'shortid';
+  import notifier from '../../utils/notifier';
 
   import resourcesBoxesStore from '../../store/resources-boxes';
 
   import * as resourcesFetcher from '../../http-fetchers/resources';
+  import * as pathsFetcher from '../../http-fetchers/paths';
 
   export default {
     name: 'PathEditor',
     data() {
       return {
-        courseDetails: {
+        pathDetails: {
+          _id: shortid(),
+          editId: shortid(),
           title: '',
           difficulty: 'medium',
           duration: '',
           description: ''
         },
+        resourcesScreenshotsUrl: resourcesScreenshotsUrl,
         boxesPerRow: null,
         resourcesBoxesStore: resourcesBoxesStore.state,
         editedResource: {}
@@ -277,8 +325,53 @@
     },
     methods: {
 
+      savePath() {
+        let self = this;
+        console.log('saving path...');
+        let path = $pure(this.pathDetails);
+        let orderedResources = $pure(this.getResourcesInOrder());
+        // change the resource '_id' property name to 'extracted'
+        // it points to the id of the extracted resource
+        let resourcesChangedIds = orderedResources.map(function(resource) {
+          let extractedId = resource._id;
+          delete resource._id;
+          resource.extracted = extractedId;
+          return resource;
+        });
+
+        console.log(resourcesChangedIds);
+        path.resources = resourcesChangedIds;
+        console.log('path to send:');
+        console.log(path);
+
+        co(function *() {
+          try {
+            let result = yield pathsFetcher.addPath(path);
+            let savedPath = result.path;
+            console.log('savedd');
+
+            $('#resource-saved')
+              .modal({
+                blurring: true
+              })
+              .modal('show');
+
+
+            self.$route.router.go(`/${savedPath._id}`);
+          } catch (err) {
+            console.log(err);
+            if (err.reason === 'NO_TITLE') {
+              notifier('error', 'Please, specify path title!');
+            } else {
+              notifier('error', 'The path was not saved!');
+            }
+          }
+        });
+
+      },
+
       showModal() {
-        $('.ui.modal')
+        $('#edit-resource')
           .modal({
             blurring: true
           })
@@ -297,7 +390,6 @@
           }
         });
 
-        console.log(resources);
         return resources;
       },
 
@@ -305,38 +397,39 @@
         let self = this;
 
         co(function *() {
-//          try {
-            let response = yield resourcesFetcher.addResource(url);
-            console.log(response);
-            let resource = response.resource;
+          //          try {
+          self.resourcesBoxesStore.extractingLoading = true;
+          let response = yield resourcesFetcher.addResource(url);
+          let resource = response.resource;
+          self.resourcesBoxesStore.extractingLoading = false;
 
-            // set default values
-            resource.difficulty = resource.difficulty || 'medium';
-            resource.duration = resource.duration || '15_min';
+          // set default values
+          resource.difficulty = resource.difficulty || 'medium';
+          resource.duration = resource.duration || '15_min';
 
-            // add the resource
-            self.resourcesBoxesStore.resources.push(resource);
+          // add the resource
+          self.resourcesBoxesStore.resources.push(resource);
 
-            // save the plcaholder index
-            let placeholderIndex;
+          // save the plcaholder index
+          let placeholderIndex;
 
-            // change placeholder data to contain the resource
-            self.resourcesBoxesStore.order.forEach(function(key, index) {
-              if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
-                self.resourcesBoxesStore.boxesUuids[key] = resource._id;
-                placeholderIndex = index;
-              }
-            });
-
-            // add new placeholder after the new resource
-            if (placeholderIndex !== undefined) {
-              self.addPlaceholder(placeholderIndex + 1);
+          // change placeholder data to contain the resource
+          self.resourcesBoxesStore.order.forEach(function(key, index) {
+            if (self.resourcesBoxesStore.boxesUuids[key] === self.placeholder) {
+              self.resourcesBoxesStore.boxesUuids[key] = resource._id;
+              placeholderIndex = index;
             }
+          });
 
-//          } catch (err) {
-//            console.log('error');
-//            console.log(err);
-//          }
+          // add new placeholder after the new resource
+          if (placeholderIndex !== undefined) {
+            self.addPlaceholder(placeholderIndex + 1);
+          }
+
+          //          } catch (err) {
+          //            console.log('error');
+          //            console.log(err);
+          //          }
         });
 
       },

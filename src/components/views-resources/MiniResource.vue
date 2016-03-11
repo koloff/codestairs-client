@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <img src="" :src="resourcesScreenshotsUrl + '/' + screenshotFile" />
+      <img :src="resourcesScreenshotsUrl + '/' + screenshotFile" />
     </div>
     <div class="content">
       <a class="header">{{title}}</a>

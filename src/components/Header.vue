@@ -11,22 +11,10 @@
 
 
 
-        <a class="item center">
+        <a v-link="{path: '/requests'}" class="item center">
           <i class="ui icon idea"></i>
           Requests
         </a>
-
-
-
-
-        <!--<a v-link="{path: '/add-resource'}" class="item center">-->
-          <!--<i class="ui icon world"></i>-->
-          <!--Add resource-->
-        <!--</a>-->
-        <!--<a v-link="{path: '/add-course'}" class="item center">-->
-          <!--<i class="ui icon student"></i>-->
-          <!--Add course-->
-        <!--</a>-->
 
 
 
@@ -38,7 +26,7 @@
 
 
         <div class="right menu">
-          <button class="ui button small blue">
+          <button v-link="{path: '/new'}" class="ui button small blue">
           <i class="student icon"></i>
           Add path
         </button>

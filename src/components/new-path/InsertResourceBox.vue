@@ -3,6 +3,9 @@
 
     <div class="ui card course">
       <div class="add-box">
+        <div :class="resourcesBoxesState.extractingLoading ? 'active' : ''" class="ui inverted dimmer">
+          <div class="ui loader"></div>
+        </div>
 
         <div class="ui left icon input">
           <input
@@ -25,12 +28,15 @@
 </template>
 
 <script>
+  import resourcesBoxesStore from '../../store/resources-boxes';
+  
   export default {
     name: 'InsertResourceBox',
     props: ['boxMethods'],
     data() {
       return {
-        url: ''
+        url: '',
+        resourcesBoxesState: resourcesBoxesStore.state
       };
     },
     ready() {
