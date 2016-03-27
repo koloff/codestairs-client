@@ -75,7 +75,6 @@
       logout() {
         auth.logout();
         notifier('success', 'You signed out successfully!');
-        console.log(this.identity.profile.username);
       },
       goSearch() {
         this.$route.router.go(`/resources?search=${this.search}`);

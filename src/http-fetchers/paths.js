@@ -54,17 +54,11 @@ export function getPath(byWhat, identifier) {
 }
 
 
-// todo
-export function getMultiple(start, count) {
+export function getMultiple(options) {
   let promise = new Promise((resolve, reject) => {
-    let query = {
-      start: start,
-      count: count
-    };
-
     request
       .get(`${api}/paths`)
-      .query(query)
+      .query(options)
       .end((err, res) => {
         if (err) {
           return reject(res.body);

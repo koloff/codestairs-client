@@ -7,50 +7,52 @@
       </h1>
     </div>
 
-    <search :search-phrase="searchPhrase"></search>
+    <h4 class="ui divider horizontal header home-menu">
+      <div class="ui compact menu">
+        <a @click="changeCriteria('most-liked')" :class="(criteria === 'most-liked') ? 'active' : ''" class="item active">
+          <i class="star icon"></i>
+          Most liked
+        </a>
+        <a @click="changeCriteria('newest')" :class="(criteria === 'newest') ? 'active' : ''" class="item">
+          <i class="time icon"></i>
+          Newest
+        </a>
+      </div>
+    </h4>
 
-    <div class="ui large buttons fluid">
-      <button @click="changeCurrentView('resources')" :class="(currentView === 'resources') ? 'active' : ''"
-              class="ui button">Resources
-      </button>
-      <div class="or"></div>
-      <button @click="changeCurrentView('courses')" :class="(currentView === 'courses') ? 'active' : ''"
-              class="ui button">Courses
-      </button>
-    </div>
+
+    <h4 class="ui header center aligned">
+      <div class="content">
+        <div id="paths-period" v-dropdown-semantic class="ui dropdown">
+          <input type="hidden" v-model="period">
+          <div class="text"></div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div data-value="today" class="item">TODAY</div>
+            <div data-value="this-week" class="item">THIS WEEK</div>
+            <div data-value="this-month" class="item">THIS MONTH</div>
+            <div data-value="this-year" class="item">THIS YEAR</div>
+          </div>
+        </div>
+      </div>
+    </h4>
 
     <div class="ui divider hidden"></div>
 
-    <div v-if="currentView === 'resources'">
-      <div class="ui cards special four stackable">
-        <mini-resource
-          v-for="resource in resources"
-          track-by="_id"
-          :id="resource._id"
-          :title="resource.title"
-          :type="resource.type"
-          :url="resource.url"
-          :date-added="resource.dateAdded"
-          :screenshot-file="resource.screenshotFile"
-        ></mini-resource>
-      </div>
+    <div class="ui cards stackable doubling four">
+      <mini-path
+        v-for="path in paths"
+        :id="path._id"
+        :date-added="path.dateAdded"
+        :title="path.title"
+        :description="path.description"
+        :resources-count="path.resources.length"
+        :difficulty="path.difficulty"
+        :duration="path.duration"
+        :rating="path.rating"
+      ></mini-path>
     </div>
 
-    <div v-if="currentView === 'courses'">
-      <div class="ui cards stackable doubling four">
-        <mini-path
-          v-for="course in courses"
-          :_id="course._id"
-          :date-added="course.dateAdded"
-          :title="course.title"
-          :description="course.description"
-          :resources-count="course.resources.length"
-          :difficulty="course.difficulty"
-          :duration="course.duration"
-          :rating="course.rating"
-        ></mini-path>
-      </div>
-    </div>
 
   </div>
 </template>
@@ -62,152 +64,71 @@
   import MiniResource from '../views-resources/MiniResource.vue';
   import MiniPath from '../views-paths/MiniPath.vue';
 
-  import {fetchResourcesSearch} from '../../store/resources';
-  import {fetchCoursesSearch} from '../../store/courses';
-
-
-  import * as resourcesFetcher from '../../http-fetchers/resources';
   import * as pathsFetcher from '../../http-fetchers/paths';
-  import * as searchFetcher from '../../http-fetchers/search';
+
 
   export default {
     name: 'Home',
     components: {
-      Search,
-      MiniResource,
       MiniPath
     },
     data() {
       return {
-        currentView: 'resources',
-        searchPhrase: '',
-        shouldFetchSearch: {
-          resources: true,
-          courses: true
-        },
-        resources: [],
-        courses: []
+        criteria: 'most-liked',
+        period: 'this-week',
+        paths: []
       }
     },
 
-    route: {
-      data() {
-        let viewRoute = this.$route.fullPath === '/resources' ? 'resources' : 'courses';
-        console.log(viewRoute);
+    ready() {
 
-        console.log(this.$route);
-        this.currentView = viewRoute;
-        console.log('current view');
-        console.log(this.currentView);
+      let $pathsPeriod = $('#paths-period');
 
-        if (this.$route.query.search) {
-          console.log('query search found');
-          this.searchPhrase = this.$route.query.search;
+      let self = this;
+      $pathsPeriod.dropdown('set selected', this.period);
+      $pathsPeriod.dropdown({
+        onChange() {
+          self.loadPaths();
         }
-        this.loadNeededData();
-      }
+      });
+
+      this.loadPaths();
     },
 
     methods: {
-
-      loadNeededData() {
-
-        if (this.searchPhrase === '' || this.searchPhrase === ' ') {
-          // get latest resources
-          if (this.shouldFetchSearch.resources && this.currentView === 'resources') {
-            console.log('fetching latest resources...');
-            let self = this;
-            co(function *() {
-              try {
-                let result = yield resourcesFetcher.getMultiple(0, 16);
-                self.resources = result;
-                console.log($pure(self.resources));
-              } catch (err) {
-                console.log(err);
-              }
-            });
-            console.log(this.resources);
-            this.shouldFetchSearch.resources = false;
-          }
-
-          // get latest courses
-          if (this.shouldFetchSearch.courses && this.currentView === 'courses') {
-            console.log('fetching latest courses...');
-            let self = this;
-            co(function *() {
-              try {
-                let result = yield pathsFetcher.getMultiple(0, 16);
-                self.courses = result;
-                console.log($pure(self.courses));
-              } catch (err) {
-                console.log(err);
-              }
-            });
-            console.log(this.courses);
-            this.shouldFetchSearch.courses = false;
-          }
-        }
-
-        if (this.shouldFetchSearch.resources && this.currentView === 'resources') {
-          console.log('fetching resources...');
-          let self = this;
-          co(function *() {
-            try {
-              let result = yield searchFetcher.fetchSearch(self.searchPhrase, 'resources');
-              self.resources = result;
-            } catch (err) {
-              if (err) {
-                console.log(err);
-              }
-            }
-          });
-          console.log(this.resources);
-          this.shouldFetchSearch.resources = false;
-        }
-
-        if (this.shouldFetchSearch.courses && this.currentView === 'courses') {
-          console.log('fetching courses...');
-          let self = this;
-          co(function *() {
-            try {
-              let result = yield searchFetcher.fetchSearch(self.searchPhrase, 'courses');
-              console.log(result);
-              self.courses = result;
-            } catch (err) {
-              if (err) {
-                console.log(err);
-              }
-            }
-          });
-          this.shouldFetchSearch.courses = false
-        }
+      changeCriteria(criteria) {
+        this.criteria = criteria;
+        this.loadPaths();
       },
 
-      changeCurrentView(view) {
-        this.currentView = view;
-        this.changeRoute();
-      },
+      loadPaths() {
 
-      changeRoute() {
-        console.log('changing route');
-        let route = `/${this.currentView}`;
-        console.log(route);
-        // if search is specified, save it
-        if (this.searchPhrase !== '' && this.searchPhrase !== ' ') {
-          route += `?search=${this.searchPhrase}`;
+        // calculate hours based on period
+        let hoursLimit;
+        switch (this.period) {
+          case 'today': hoursLimit = 24; break;
+          case 'this-week': hoursLimit = 24 * 7; break;
+          case 'this-month': hoursLimit = 24 * 30; break;
+          case 'this.year': hoursLimit = 24 * 365; break;
+          default: hoursLimit = 24 * 30;
         }
-        this.$route.router.go(route);
-        this.loadNeededData();
-      }
-    },
-    events: {
-      'search': function(phrase) {
-        this.shouldFetchSearch = {
-          resources: true,
-          courses: true
-        };
-        this.searchPhrase = phrase;
-        this.changeRoute();
+
+        console.log('changed', this.criteria, this.period);
+
+        let self = this;
+        co(function *() {
+          let result = yield pathsFetcher.getMultiple({
+            period: hoursLimit,
+            criteria: self.criteria,
+            start: 0,
+            count: 50
+          });
+
+
+          console.log(result);
+          self.paths = result;
+        });
+
       }
     }
   }

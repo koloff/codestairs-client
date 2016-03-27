@@ -37,31 +37,47 @@
         <!--todo extract to component-->
         <div class="ui cards stackable four">
 
-          <div v-for="resource in path.resources" class="ui card">
-            <div class="content">
-              <div class="header">{{$index + 1}}. {{resource.title}}</div>
 
-              <div class="meta">
-                <div :class="this.$eval('resource.difficulty | difficultyColor')" class="ui small label large">
-                  {{resource.difficulty | difficulty}}
-                </div>
-                <div v-if="resource.duration" class="ui tiny blue label large">
-                  {{resource.duration | duration}}
-                </div>
-              </div>
-            </div>
+          <mini-resource
+            v-for="resource in path.resources"
+            :id="resource._id"
+            :resource="resource"
+            :title="resource.title"
+            :description="resource.description"
+            :url="resource.extracted.url"
+            :screenshot-file="resource.extracted.screenshotFile"
+            :type="resource.type"
+            :difficulty="resource.difficulty"
+            :duration="resource.duration"
+          ></mini-resource>
 
-            <div class="content">
-              <img class="ui medium image" :src="resourcesScreenshotsUrl + '/' + resource.extracted.screenshotFile">
-            </div>
 
-            <div class="content">
-              <div class="description">
-                <div v-if="!resource.description">No description.</div>
-                {{resource.description}}
-              </div>
-            </div>
-          </div>
+
+          <!--<div v-for="resource in path.resources" class="ui card">-->
+            <!--<div class="content">-->
+              <!--<div class="header">{{$index + 1}}. {{resource.title}}</div>-->
+
+              <!--<div class="meta">-->
+                <!--<div :class="this.$eval('resource.difficulty | difficultyColor')" class="ui small label large">-->
+                  <!--{{resource.difficulty | difficulty}}-->
+                <!--</div>-->
+                <!--<div v-if="resource.duration" class="ui tiny blue label large">-->
+                  <!--{{resource.duration | duration}}-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="content">-->
+              <!--<img class="ui medium image" :src="resourcesScreenshotsUrl + '/' + resource.extracted.screenshotFile">-->
+            <!--</div>-->
+
+            <!--<div class="content">-->
+              <!--<div class="description">-->
+                <!--<div v-if="!resource.description">No description.</div>-->
+                <!--{{resource.description}}-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
 
         </div>
       </div>
@@ -73,7 +89,7 @@
 <script>
   import * as pathsFetcher from '../../http-fetchers/paths';
   import {resourcesScreenshotsUrl} from '../../config';
-
+  import MiniResource from '../views-resources/MiniResource.vue';
 
   export default {
     name: 'PathPage',
@@ -83,8 +99,9 @@
         resourcesScreenshotsUrl: resourcesScreenshotsUrl
       }
     },
+    components: {MiniResource},
     route: {
-      data: function({ to: { params: { pathId }}}) {
+      data: function({to: {params: {pathId}}}) {
         let self = this;
         return pathsFetcher.getPath('id', pathId)
           .then(function(res, err) {

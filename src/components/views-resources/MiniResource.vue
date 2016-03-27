@@ -3,34 +3,35 @@
     <span class="ui right corner label">
       <i :class="getTypeClass()" class="icon"></i>
     </span>
-    <div class="blurring dimmable image">
+    <div class="blurring dimmable image resource-dimmer">
       <div class="ui inverted dimmer">
         <div class="content">
           <div class="center">
-            <div class="ui large buttons">
-              <a :href="'http://' + url" target="_blank" class="ui button primary">Open</a>
-              <div class="or"></div>
-              <a v-link="{path: '/resource/'+id}" class="ui button primary">Details</a>
-            </div>
+            <button :href="'http://' + url" target="_blank" class="ui button primary icon">
+              <i class="ui icon world"></i>
+              Open</button>
           </div>
         </div>
       </div>
-      <img :src="resourcesScreenshotsUrl + '/' + screenshotFile" />
+      <img :src="resourcesScreenshotsUrl + '/' + screenshotFile"/>
     </div>
     <div class="content">
       <a class="header">{{title}}</a>
       <div class="meta">
         <h4>{{url | domain}}</h4>
-        <span>Added on <strong>{{dateAdded | date}}</strong></span>
       </div>
+      <div class="ui divider"></div>
+
+      {{resource.description || 'No description.'}}
     </div>
     <div class="extra content">
-      <span class="left floated">
-         <rating :count="0" :value="0" :id="id" :type="'course'"></rating>
-      </span>
-      <span class="right floated">
-        0 Comments
-      </span>
+
+      <div :class="this.$eval('difficulty | difficultyColor')" class="ui small label">{{difficulty | difficulty}}</div>
+
+
+      <div v-if="duration" class="ui tiny blue label timeLabel">
+        {{duration | duration}}
+      </div>
     </div>
   </div>
 </template>
@@ -39,13 +40,13 @@
 <script>
   import {resourcesScreenshotsUrl} from '../../config';
   import Rating from '../social/Rating.vue';
-  
+
   export default {
     name: 'MiniResource',
     components: {
       Rating
     },
-    props: ['id', 'title', 'url', 'dateAdded', 'screenshotFile', 'type'],
+    props: ['id', 'title', 'resource', 'description', 'url', 'screenshotFile', 'type', 'difficulty', 'duration'],
     data() {
       return {
         resourcesScreenshotsUrl: resourcesScreenshotsUrl
@@ -53,7 +54,7 @@
     },
     ready () {
       // todo prevent html reparsing
-      $('.special.cards .image').dimmer({
+      $('.resource-dimmer').dimmer({
         on: 'hover'
       });
     },

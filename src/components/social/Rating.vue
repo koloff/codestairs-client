@@ -1,7 +1,16 @@
 <template>
   <div>
-    <div @click="rateClicked()" :id="id" :data-rating="value" class="ui star rating"></div>
-    ({{!count ? 0 : 1}})
+    <div class="ui mini vertical buttons vote-component">
+      <button @click="rate(1)" class="ui mini icon button voteButton">
+        <i class="caret up icon voteIcon"></i>
+      </button>
+      <div class="ui label voteLabel">
+        {{value}}
+      </div>
+      <button @click="rate(-1)" class="ui mini icon button voteButton">
+        <i class="caret down icon voteIcon"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -14,49 +23,54 @@
 
   export default {
     name: 'Rating',
-    props: ['id', 'type', 'value', 'count'],
+    props: ['id', 'type', 'value'],
     data() {
       return {
         rated: false
       }
     },
-    ready() {
-
-      let self = this;
-      $(`#${self.id}`).rating({
-        maxRating: 5,
-        onRate: function(value) {
-          if (self.rated) {
-            console.log(value);
-            console.log('rated');
-            co(function *() {
-              console.log('ratedddd');
-              self.count++;
-              try {
-                let result = yield socialFetcher.rate(self.type, $pure(identity.state.token), self.id, value);
-                console.log('resulttt', $pure(result));
-                self.value = result.value;
-                notifier('success', 'Rated succesfully!');
-              } catch (err) {
-                console.log(err);
-                notifier('error', 'You cannot rate this!');
-              }
-
-              self.rated = false;
-            });
-
-          }
-
-
-        }
-      })
-    },
-
     methods: {
-      rateClicked() {
-        this.rated = true;
+      rate(value) {
+        console.log('ratingggg', value, this.id);
+
+        let self = this;
+        co(function *() {
+          try {
+            let result = yield socialFetcher.rate(self.type, identity.state.token, self.id, value);
+            self.value = result.value;
+            notifier('success', 'Vote done!');
+          } catch (err) {
+            console.log(err);
+          }
+        });
       }
     }
-
   }
+
 </script>
+
+<style>
+  .vote-component {
+    position: absolute;
+    bottom: 7px;
+    left: 0;
+  }
+
+  .voteIcon {
+    font-size: 2em !important;
+    max-height: 10px !important;
+    max-width: 26px !important;
+  }
+  .voteButton {
+    padding-top: 1px !important;
+    padding-bottom: 0px !important;
+    background: transparent !important;
+  }
+
+  .voteLabel {
+    background-color: transparent !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    text-align: center;
+  }
+</style>

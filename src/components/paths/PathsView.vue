@@ -7,27 +7,54 @@
     </div>
   </div>
 
-  <div class="ui secondary pointing menu blue">
-    <a class="active item">
-      Popular
-    </a>
-    <a class="item">
-      Top rated
-    </a>
-    <a class="item">
-      Recent
-    </a>
-    <div class="right menu">
-      <a class="ui item  selection dropdown">
-        <input type="hidden" name="country"/>
-        <i class="dropdown icon"></i>
-        <div class="default text">Select Country</div>
-        <div class="menu">
-          <div class="item" data-value="uk"><i class="icon wait"></i>This week</div>
-        </div>
+  <h4 class="ui horizontal divider header home-menu">
+    <div class="ui compact menu">
+      <a class="item active">
+        <i class="star icon"></i>
+        Popular
       </a>
+      <a class="item">
+        <i class="heart icon"></i>
+        Liked
+      </a>
+      <div class="ui dropdown item">
+        Today <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item">English</a>
+          <a class="item">Russian</a>
+          <a class="item">Spanish</a>
+        </div>
+      </div>
     </div>
-  </div>
+  </h4>
+
+
+  <div class="ui divider hidden"></div>
+
+<!--<div class="ui segment basic">-->
+
+  <!--<div class="ui secondary pointing menu blue">-->
+    <!--<a class="active item">-->
+      <!--Popular-->
+    <!--</a>-->
+    <!--<a class="item">-->
+      <!--Top rated-->
+    <!--</a>-->
+    <!--<a class="item">-->
+      <!--Recent-->
+    <!--</a>-->
+    <!--<div class="right menu">-->
+      <!--<a class="ui item  selection dropdown">-->
+        <!--<input type="hidden" name="country"/>-->
+        <!--<i class="dropdown icon"></i>-->
+        <!--<div class="default text">Select Country</div>-->
+        <!--<div class="menu">-->
+          <!--<div class="item" data-value="uk"><i class="icon wait"></i>This week</div>-->
+        <!--</div>-->
+      <!--</a>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
 
   <div class="ui stackable container">
     <div class="ui three stackable  cards">

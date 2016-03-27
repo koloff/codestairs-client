@@ -58,7 +58,7 @@
                 <div class="two fields">
                   <div class="one field">
                     Difficulty
-                    <div id="edited-difficulty" class="ui fluid selection dropdown">
+                    <div v-dropdown-semantic id="edited-difficulty" class="ui fluid selection dropdown">
                       <input v-model="editedResource.difficulty" value="{{editedResource.difficulty}}" type="hidden"
                              name="difficulty"/>
                       <i class="dropdown icon"></i>
@@ -74,7 +74,7 @@
 
                   <div class="one field">
                     Duration
-                    <div id="edited-duration" class="ui fluid selection dropdown">
+                    <div v-dropdown-semantic id="edited-duration" class="ui fluid selection dropdown">
                       <input id="edited-duration" v-model="editedResource.duration" value="{{editedResource.duration}}"
                              type="hidden" name="difficulty"/>
                       <i class="dropdown icon"></i>
@@ -110,7 +110,7 @@
 
 
     <!--path details-->
-    <div class="ui secondary segment">
+    <div class="ui segment">
 
       <h5 class="ui horizontal header divider">
         <i class="icon write"></i>
@@ -126,7 +126,7 @@
             </div>
 
             <div class="field">
-              <div class="ui fluid selection dropdown">
+              <div v-dropdown-semantic class="ui fluid selection dropdown">
                 <input v-model="pathDetails.difficulty" type="hidden" name="difficulty"/>
                 <i class="dropdown icon"></i>
                 <div class="default text">Difficulty</div>
@@ -140,7 +140,7 @@
             </div>
 
             <div class="field">
-              <div class="ui fluid selection dropdown">
+              <div v-dropdown-semantic class="ui fluid selection dropdown">
                 <input v-model="pathDetails.duration" type="hidden" name="difficulty"/>
                 <i class="dropdown icon"></i>
                 <div class="default text">Duration</div>
@@ -169,16 +169,16 @@
 
 
     <!--buttons-->
-    <div class="ui segment secondary">
+    <div class="ui  ">
       <div class="ui grid stackable">
         <div class="four wide column">
 
           <div class="ui buttons fluid">
-            <button class="ui blue basic icon button">
+            <button class="ui blue  icon button">
               <i class="icon upload"></i>
               Import
             </button>
-            <button class="ui blue icon basic button">
+            <button class="ui blue icon  button">
               <i class="icon save"></i>
               Export
             </button>
@@ -257,9 +257,6 @@
     },
     props: ['resources'],
     ready() {
-
-      $('.dropdown').dropdown();
-
       let self = this;
 
       // generates uuid hash set for each resource in order to save their order
