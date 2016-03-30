@@ -27,7 +27,7 @@
                 <div class="field">
                   <label>Duration</label>
                   <div v-dropdown-semantic class="ui fluid selection dropdown">
-                    <input v-model="requestToAdd.availableTime" type="hidden" />
+                    <input v-model="requestToAdd.availableTime" type="hidden"/>
                     <i class="dropdown icon"></i>
                     <div class="default text">How much time do you have</div>
                     <div class="menu">
@@ -65,40 +65,50 @@
       <i class="ui icon idea"></i>Add new request
     </button>
 
-    <div class="ui four cards doubling">
-      <!--<a v-link="{path: '/requests/V1GudZing'}" class="ui card">-->
-      <!--<div class="content">-->
-      <!--<div class="meta">-->
-      <!--<span class="category">5 days</span>-->
-      <!--<span class="right floated">pesho</span>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="content">-->
-      <!--<div class="description">-->
-      <!--<p>-->
-      <!--<div class="ui gray label">Knows</div>-->
-      <!--Programming basics and OOP. Have experience with C#.<br><br>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--<div class="description">-->
-      <!--<p>-->
-      <!--<div class="ui green label">Requests</div>-->
-      <!--Creating games with the Unity game engine.<br><br>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="extra content">-->
 
-      <!--<div class="ui icon buttons tiny">-->
-      <!--<button class="ui button"><i class="icon thumbs up green"></i></button>-->
-      <!--<button class="ui button"><i class="icon thumbs down red"></i></button>-->
-      <!--</div>-->
+    <h4 class="ui divider horizontal header home-menu">
+      <div class="ui compact menu">
+        <a @click="changeCriteria('most-liked')" :class="(criteria === 'most-liked') ? 'active' : ''"
+           class="item active">
+          <i class="star icon"></i>
+          Most liked
+        </a>
+        <a @click="changeCriteria('newest')" :class="(criteria === 'newest') ? 'active' : ''" class="item">
+          <i class="time icon"></i>
+          Newest
+        </a>
+      </div>
+    </h4>
 
-      <!--<div class="right floated author">-->
-      <!--4 answers-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</a>-->
+    <h4 class="ui header center aligned">
+      <div class="content">
+        <div id="requests-period" v-dropdown-semantic class="ui dropdown">
+          <input type="hidden" v-model="period">
+          <div class="text"></div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div data-value="today" class="item">TODAY</div>
+            <div data-value="this-week" class="item">THIS WEEK</div>
+            <div data-value="this-month" class="item">THIS MONTH</div>
+            <div data-value="this-year" class="item">THIS YEAR</div>
+          </div>
+        </div>
+      </div>
+    </h4>
+
+
+    <div class="ui cards stackable doubling four">
+      <mini-request
+        v-for="request in requests"
+        :id="request._id"
+        :date-added="request.dateAdded"
+        :knows="request.knows"
+        :wants-to-learn="request.wantsToLearn"
+        :available-time="request.availableTime"
+        :author="request.author"
+        :comments-length="request.comments.length"
+        :rating="request.rating"
+      ></mini-request>
     </div>
 
 
@@ -107,15 +117,19 @@
 
 <script>
   import NewRequest from './NewRequest.vue';
+  import MiniRequest from './MiniRequest.vue';
   import  * as requestsFetcher from '../../http-fetchers/requests';
   import co from 'co';
 
 
   export default {
     name: 'RequestsPage',
-    components: {NewRequest},
+    components: {MiniRequest},
     data() {
       return {
+        criteria: 'most-liked',
+        period: 'this-week',
+        requests: [],
         requestToAdd: {
           knows: '',
           wantsToLearn: '',
@@ -124,15 +138,23 @@
       }
     },
     ready() {
-      $('#new-request')
-        .modal({
-          blurring: true
-        })
-        .modal('show');
+      let $requestsPeriod = $('#requests-period');
+
+      let self = this;
+      $requestsPeriod.dropdown('set selected', this.period);
+      $requestsPeriod.dropdown({
+        onChange() {
+          self.loadPaths();
+        }
+      });
+
+      this.loadRequests();
+
     },
     methods: {
       showAddRequest() {
         console.log('new request showed');
+
 
         $('#new-request')
           .modal({
@@ -145,7 +167,47 @@
         co(function *() {
           let result = yield requestsFetcher.addRequest(self.requestToAdd);
           console.log(result);
+
+          self.loadRequests();
         });
+      },
+      loadRequests() {
+
+        // calculate hours based on period
+        let hoursLimit;
+        switch (this.period) {
+          case 'today':
+            hoursLimit = 24;
+            break;
+          case 'this-week':
+            hoursLimit = 24 * 7;
+            break;
+          case 'this-month':
+            hoursLimit = 24 * 30;
+            break;
+          case 'this.year':
+            hoursLimit = 24 * 365;
+            break;
+          default:
+            hoursLimit = 24 * 30;
+        }
+
+        console.log('changed', this.criteria, this.period);
+
+        let self = this;
+        co(function *() {
+          let result = yield requestsFetcher.getMultiple({
+            period: hoursLimit,
+            criteria: self.criteria,
+            start: 0,
+            count: 50
+          });
+
+
+          console.log(result);
+          self.requests = result;
+        });
+
       }
     }
   }

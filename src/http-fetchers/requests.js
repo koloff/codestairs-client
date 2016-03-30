@@ -23,3 +23,37 @@ export function addRequest(requestData) {
 
   return promise;
 }
+
+
+export function getById(id) {
+  let promise = new Promise((resolve, reject) => {
+    request
+      .get(`${api}/requests/${id}`)
+      .end((err, res) => {
+        if (err) {
+          return reject(res.body);
+        }
+
+        return resolve(res.body);
+      });
+  });
+
+  return promise;
+}
+
+export function getMultiple(options) {
+  let promise = new Promise((resolve, reject) => {
+    request
+      .get(`${api}/requests`)
+      .query(options)
+      .end((err, res) => {
+        if (err) {
+          return reject(res.body);
+        }
+
+        return resolve(res.body);
+      });
+  });
+
+  return promise;
+}

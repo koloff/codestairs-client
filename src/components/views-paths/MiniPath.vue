@@ -50,7 +50,6 @@
 </template>
 
 <script>
-  import ResourceInCourse from '../views-resources/ResourceInCourse.vue';
   import Rating from '../social/Rating.vue';
 
   export default {

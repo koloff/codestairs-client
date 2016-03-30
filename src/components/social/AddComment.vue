@@ -1,17 +1,12 @@
 <template>
-  <div>
-    <div class="ui mini vertical buttons vote-component">
-      <button @click="rate(1)" class="ui mini icon button voteButton">
-        <i class="caret up icon voteIcon"></i>
-      </button>
-      <div class="ui label voteLabel">
-        {{value}}
-      </div>
-      <button @click="rate(-1)" class="ui mini icon button voteButton">
-        <i class="caret down icon voteIcon"></i>
-      </button>
+  <form class="ui reply form">
+    <div class="field">
+      <textarea v-model="comment"></textarea>
     </div>
-  </div>
+    <button @click="addComment()" class="ui blue labeled submit icon button">
+      <i class="icon edit"></i> Post
+    </button>
+  </form>
 </template>
 
 
@@ -22,23 +17,22 @@
   import co from 'co';
 
   export default {
-    name: 'Rating',
-    props: ['id', 'type', 'value'],
+    name: 'AddComment',
+    props: ['id'],
     data() {
       return {
-        rated: false
+        comment: ''
       }
     },
     methods: {
-      rate(value) {
+      addComment() {
 
         let self = this;
         co(function *() {
           try {
-            let result = yield socialFetcher.rate(identity.state.token, self.id, value);
+            let result = yield socialFetcher.comment(identity.state.token, self.id, self.comment);
             console.log(result);
-            self.value = result.value;
-            notifier('success', 'Vote done!');
+            notifier('success', 'Comment posted!');
           } catch (err) {
             console.log(err);
           }

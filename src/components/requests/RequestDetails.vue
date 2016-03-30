@@ -7,6 +7,9 @@
       Request
     </h2>
 
+    {{request | json}}
+
+
     <div class="ui grid">
       <div class="column six wide">
         <div class="ui top attached header orange">Already knows</div>
@@ -81,14 +84,15 @@
               <div class="column four wide right aligned">
                 <button class="ui button icon tiny"><i class="icon thumbs up green"></i></button>
                 <div class="ui label circular basic">
-                 4
+                  4
                 </div>
                 <button class="ui button icon tiny"><i class="icon thumbs down red"></i></button>
               </div>
             </div>
 
             <div class="text">
-              You can check out these videos: <a href="">http://codestairs.com/e20782e64eae</a>. These will get you familiar with the basic concepts.
+              You can check out these videos: <a href="">http://codestairs.com/e20782e64eae</a>. These will get you
+              familiar with the basic concepts.
             </div>
             <div class="actions">
               <a class="reply">Reply</a>
@@ -97,71 +101,10 @@
         </div>
       </div>
 
-      <div class="ui segment">
-        <div class="comment">
-          <div class="content">
-            <div class="ui grid">
-              <div class="column twelve wide">
-                <a class="author">gosho98</a>
-                <div class="metadata">
-                  <span class="date">2 days ago</span>
-                </div>
-              </div>
-              <div class="column four wide right aligned">
-                <button class="ui button icon tiny"><i class="icon thumbs up green"></i></button>
-                <div class="ui label circular basic">
-                  2
-                </div>
-                <button class="ui button icon tiny"><i class="icon thumbs down red"></i></button>
-              </div>
-            </div>
-            <div class="text">
-              <p>This might be helpful: <a href="">http://codestairs.com/g60sfee78hgt</a>.</p>
-            </div>
-            <div class="actions">
-              <a class="reply">Reply</a>
-            </div>
-          </div>
-          <div class="comments">
-            <div class="ui segment">
-              <div class="comment">
-                <div class="content">
-                  <div class="ui grid">
-                    <div class="column twelve wide">
-                      <a class="author">pesho</a>
-                      <div class="metadata">
-                        <span class="date">Just now</span>
-                      </div>
-                    </div>
-                    <div class="column four wide right aligned">
-                      <button class="ui button icon tiny"><i class="icon thumbs up green"></i></button>
-                      <div class="ui label circular basic">
-                        0
-                      </div>
-                      <button class="ui button icon tiny"><i class="icon thumbs down red"></i></button>
-                    </div>
-                  </div>
-                  <div class="text">
-                    Thank you so much! :)
-                  </div>
-                  <div class="actions">
-                    <a class="reply">Reply</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <add-comment
+        :id="request._id"
+      ></add-comment>
 
-      <form class="ui reply form">
-        <div class="field">
-          <textarea></textarea>
-        </div>
-        <div class="ui blue labeled submit icon button">
-          <i class="icon edit"></i> Post
-        </div>
-      </form>
     </div>
 
 
@@ -169,7 +112,26 @@
 </template>
 
 <script>
+
+  import AddComment from '../social/AddComment.vue';
+  import * as requestsFetcher from '../../http-fetchers/requests';
+
   export default {
-    name: 'RequestDetails'
+    name: 'RequestDetails',
+    components: {AddComment},
+    data() {
+      return {
+        request: {}
+      }
+    },
+    route: {
+      data: function({to: {params: {requestId}}}) {
+        let self = this;
+        return requestsFetcher.getById(requestId)
+          .then(function(res, err) {
+            return {request: res};
+          });
+      }
+    }
   }
 </script>
