@@ -42,6 +42,7 @@
 
       </div>
       <div class="right floated meta">
+        <div class="ui divider small hidden"></div>
         0 comments
       </div>
     </div>

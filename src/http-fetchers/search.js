@@ -1,7 +1,7 @@
 import request from 'superagent';
 import {api} from './../config';
 
-export function fetchSearch(phrase, type) {
+export function fetchSearch(type, phrase) {
 
   let promise = new Promise((resolve, reject) => {
     request
@@ -12,7 +12,6 @@ export function fetchSearch(phrase, type) {
           return reject(res.body);
         }
 
-        console.log(res.body);
         return resolve(res.body);
       });
   });

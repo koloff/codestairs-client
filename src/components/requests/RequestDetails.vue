@@ -2,65 +2,47 @@
   <div>
     <div class="ui divider hidden"></div>
 
-    <h2 class="ui dividing header">
-      <i class="icon idea"></i>
+    <h2 class="ui header icon center aligned">
       Request
     </h2>
 
-    {{request | json}}
+
+    <h2 class="ui dividing header">
+      <div class="ui label">
+        <rating
+          :id="request._id"
+          :value="ratingValue"
+        ></rating>
+
+      </div>
+
+      <div class="ui label circular basic large">
+        Asked by <a href="">{{username}}</a> on {{request.dateAdded | date}}
+      </div>
+    </h2>
 
 
-    <div class="ui grid">
+    <div class="ui grid stackable">
       <div class="column six wide">
         <div class="ui top attached header orange">Already knows</div>
         <div class="ui attached segment">
-          Programming basics and OOP. Have experience with C#.
+          {{request.knows || 'Not specified.'}}
         </div>
       </div>
       <div class="column six wide">
         <div class="ui top attached header green">Wants to learn</div>
         <div class="ui attached segment">
-          Creating games with the Unity game engine.
+          {{request.wantsToLearn}}
         </div>
       </div>
       <div class="column four wide">
         <div class="ui top attached header">Time available</div>
         <div class="ui attached segment">
-          <strong>1 week</strong>
+          <strong>{{request.availableTime | duration}}
+          </strong>
+          <span v-if="!request.availableTime">Not specified!</span>
         </div>
       </div>
-    </div>
-
-    <div class="ui segment secondary">
-
-      <div class="ui grid">
-
-        <div class="ui column four wide">
-
-          <button class="ui button icon"><i class="icon thumbs up green"></i></button>
-          <div class="ui label circular basic">
-            3
-          </div>
-          <button class="ui button icon"><i class="icon thumbs down red"></i></button>
-
-
-        </div>
-
-        <div class="ui column eight wide center aligned">
-          <div class="ui label large basic">
-            <i class="eye icon"></i>23 views
-          </div>
-        </div>
-
-        <div class="ui column four wide right aligned">
-          <div class="ui label circular basic large">
-            Asked by <a href="">pesho</a> on 1/3/2016
-          </div>
-        </div>
-
-
-      </div>
-
     </div>
 
 
@@ -69,43 +51,10 @@
       Recommendations
     </h5>
 
-    <div class="ui comments center aligned">
-
-      <div class="ui segment">
-        <div class="comment">
-          <div class="content">
-            <div class="ui grid">
-              <div class="column twelve wide">
-                <a class="author">vankata_1211</a>
-                <div class="metadata">
-                  <span class="date">Today at 5:42PM</span>
-                </div>
-              </div>
-              <div class="column four wide right aligned">
-                <button class="ui button icon tiny"><i class="icon thumbs up green"></i></button>
-                <div class="ui label circular basic">
-                  4
-                </div>
-                <button class="ui button icon tiny"><i class="icon thumbs down red"></i></button>
-              </div>
-            </div>
-
-            <div class="text">
-              You can check out these videos: <a href="">http://codestairs.com/e20782e64eae</a>. These will get you
-              familiar with the basic concepts.
-            </div>
-            <div class="actions">
-              <a class="reply">Reply</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <add-comment
-        :id="request._id"
-      ></add-comment>
-
-    </div>
+    <comments-block
+      :id="request._id"
+      :comments="request.comments"
+    ></comments-block>
 
 
   </div>
@@ -113,25 +62,35 @@
 
 <script>
 
-  import AddComment from '../social/AddComment.vue';
+  import co from 'co';
+  import Rating from '../social/Rating.vue';
+  import CommentsBlock from '../social/CommentsBlock.vue';
+
   import * as requestsFetcher from '../../http-fetchers/requests';
+
 
   export default {
     name: 'RequestDetails',
-    components: {AddComment},
+    components: {Rating, CommentsBlock},
     data() {
       return {
-        request: {}
+        request: {},
+        ratingValue: null,
+        username: ''
       }
     },
-    route: {
-      data: function({to: {params: {requestId}}}) {
-        let self = this;
-        return requestsFetcher.getById(requestId)
-          .then(function(res, err) {
-            return {request: res};
-          });
-      }
+    ready() {
+      let self = this;
+      co(function *() {
+        try {
+          let result = yield requestsFetcher.getById(self.$route.params.requestId);
+          self.request = result;
+          self.ratingValue = result.rating.value;
+          self.username = result.author.username;
+        } catch (err) {
+          console.log(err);
+        }
+      });
     }
   }
 </script>

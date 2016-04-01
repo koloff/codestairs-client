@@ -77,7 +77,7 @@
         notifier('success', 'You signed out successfully!');
       },
       goSearch() {
-        this.$route.router.go(`/resources?search=${this.search}`);
+        this.$route.router.go(`/search?type=paths&phrase=${this.search}`);
         this.search = '';
       }
     }

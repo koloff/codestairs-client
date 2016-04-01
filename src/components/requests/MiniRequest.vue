@@ -10,7 +10,7 @@
     <div class="content">
       <h5 class="ui header grey">Knows</h5>
       <div class="request-data" class="description">
-        {{knows}}
+        {{knows || 'Not specified.'}}
       </div>
       <h5 class="ui header blue">Wants to learn</h5>
       <div class="request-data" class="description">
@@ -34,6 +34,7 @@
 
       </div>
       <div class="right floated meta">
+        <div class="ui divider small hidden"></div>
         0 comments
       </div>
     </div>

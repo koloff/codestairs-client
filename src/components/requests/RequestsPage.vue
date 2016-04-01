@@ -50,7 +50,7 @@
     </div>
 
     <div class="ui divider hidden"></div>
-    <div class="ui segment basic">
+    <div class="ui segment basic no-padding">
       <h2 class="ui icon header center aligned">
         <i class="idea icon"></i>
         <div class="content">
@@ -59,11 +59,13 @@
         </div>
       </h2>
     </div>
+    <div class="ui divider hidden"></div>
 
-
-    <button @click="showAddRequest()" class="ui button primary icon">
-      <i class="ui icon idea"></i>Add new request
-    </button>
+    <div class="ui segment basic center aligned centered no-padding">
+      <button @click="showAddRequest()" class="ui button primary icon center aligned">
+        <i class="ui icon idea"></i>Add new request
+      </button>
+    </div>
 
 
     <h4 class="ui divider horizontal header home-menu">
@@ -96,6 +98,8 @@
       </div>
     </h4>
 
+    <div class="ui divider hidden"></div>
+
 
     <div class="ui cards stackable doubling four">
       <mini-request
@@ -120,7 +124,7 @@
   import MiniRequest from './MiniRequest.vue';
   import  * as requestsFetcher from '../../http-fetchers/requests';
   import co from 'co';
-
+  import notifier from '../../utils/notifier';
 
   export default {
     name: 'RequestsPage',
@@ -144,7 +148,7 @@
       $requestsPeriod.dropdown('set selected', this.period);
       $requestsPeriod.dropdown({
         onChange() {
-          self.loadPaths();
+          self.loadRequests();
         }
       });
 
@@ -152,6 +156,10 @@
 
     },
     methods: {
+      changeCriteria(criteria) {
+        this.criteria = criteria;
+        this.loadRequests();
+      },
       showAddRequest() {
         console.log('new request showed');
 
@@ -165,8 +173,12 @@
       addRequest() {
         let self = this;
         co(function *() {
-          let result = yield requestsFetcher.addRequest(self.requestToAdd);
-          console.log(result);
+          try {
+            let result = yield requestsFetcher.addRequest(self.requestToAdd);
+          } catch (err) {
+            console.log(err);
+            notifier('error', 'Please specify what you want to learn!');
+          }
 
           self.loadRequests();
         });

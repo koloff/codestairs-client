@@ -22,6 +22,9 @@ export default function(router) {
     'requests/:requestId': {
       component: require('./components/requests/RequestDetails.vue')
     },
+    'search': {
+      component: require('./components/search/SearchPage.vue')
+    },
     '/add-course': {
       component: require('./components/add/AddCourse.vue')
     },

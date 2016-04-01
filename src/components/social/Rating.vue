@@ -50,27 +50,25 @@
 </script>
 
 <style>
-  .vote-component {
-    position: absolute;
-    bottom: 7px;
-    left: 0;
-  }
-
   .voteIcon {
     font-size: 2em !important;
     max-height: 10px !important;
     max-width: 26px !important;
+    text-align: center !important;
+    margin: 0 !important;
   }
+
   .voteButton {
-    padding-top: 1px !important;
-    padding-bottom: 0px !important;
+    padding: 0 !important;
     background: transparent !important;
+    text-align: center !important;
   }
 
   .voteLabel {
+    margin: 3px !important;
+    font-size: 13px !important;
     background-color: transparent !important;
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
+    padding: 0 !important;
     text-align: center;
   }
 </style>

@@ -36,6 +36,10 @@ body {
     margin-bottom: 20px !important;
 }
 
+.no-padding {
+    padding: 0 !important;
+}
+
 .container-box {
     box-sizing: border-box;
     position: relative;
@@ -54,4 +58,9 @@ body {
     height: 150px;
     background: whitesmoke;
     box-sizing: content-box;
+}
+
+#noty_bottomCenter_layout_container {
+    -webkit-filter: none;
+    filter: none;
 }
