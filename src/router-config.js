@@ -40,6 +40,9 @@ export default function(router) {
     '/about': {
       component: require('./components/info/About.vue')
     },
+    '/api': {
+      component: require('./components/info/Api.vue')
+    },
     '/:pathId': {
       component: require('./components/views-paths/PathPage.vue')
     }

@@ -51,35 +51,8 @@
             :duration="resource.duration"
           ></mini-resource>
 
-
-
-          <!--<div v-for="resource in path.resources" class="ui card">-->
-            <!--<div class="content">-->
-              <!--<div class="header">{{$index + 1}}. {{resource.title}}</div>-->
-
-              <!--<div class="meta">-->
-                <!--<div :class="this.$eval('resource.difficulty | difficultyColor')" class="ui small label large">-->
-                  <!--{{resource.difficulty | difficulty}}-->
-                <!--</div>-->
-                <!--<div v-if="resource.duration" class="ui tiny blue label large">-->
-                  <!--{{resource.duration | duration}}-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-
-            <!--<div class="content">-->
-              <!--<img class="ui medium image" :src="resourcesScreenshotsUrl + '/' + resource.extracted.screenshotFile">-->
-            <!--</div>-->
-
-            <!--<div class="content">-->
-              <!--<div class="description">-->
-                <!--<div v-if="!resource.description">No description.</div>-->
-                <!--{{resource.description}}-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
         </div>
+
       </div>
     </div>
 

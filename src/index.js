@@ -31,7 +31,6 @@ if (process.env.NODE_ENV !== 'production') {
 Vue.use(VueValidator);
 validators(Vue);
 
-
 // bootstrap filters
 import './filters/domain';
 import './filters/date';

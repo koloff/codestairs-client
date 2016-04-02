@@ -51,6 +51,16 @@
       Recommendations
     </h5>
 
+    <div v-if="!identity.authenticated" class="ui icon message blue">
+      <i class="sign in icon"></i>
+      <div class="content">
+        <div class="header">
+          Login to recommend!
+        </div>
+        <p>Logged users can add recommendations and ratings.</p>
+      </div>
+    </div>
+
     <comments-block
       :id="request._id"
       :comments="request.comments"
@@ -65,7 +75,7 @@
   import co from 'co';
   import Rating from '../social/Rating.vue';
   import CommentsBlock from '../social/CommentsBlock.vue';
-
+  import * as identity from '../../store/identity';
   import * as requestsFetcher from '../../http-fetchers/requests';
 
 
@@ -74,6 +84,7 @@
     components: {Rating, CommentsBlock},
     data() {
       return {
+        identity: identity.state,
         request: {},
         ratingValue: null,
         username: ''

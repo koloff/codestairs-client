@@ -50,6 +50,20 @@
         :rating="request.rating"
       ></mini-request>
     </div>
+    <div v-if="searchType === 'paths' && paths.length < 1" class="ui message blue">
+      <div class="header">
+        No paths found for "{{searchPhrase}}"
+      </div>
+      <p>Please try with something else or look in requests.</p>
+    </div>
+    <div v-if="searchType === 'requests' && requests.length < 1" class="ui message blue">
+      <div class="header">
+        No requests found for "{{searchPhrase}}"
+      </div>
+      <p>Please try with something else look in paths.</p>
+    </div>
+
+
 
 
   </div>

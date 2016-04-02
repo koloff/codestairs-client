@@ -110,7 +110,7 @@
 
 
     <!--path details-->
-    <div class="ui segment">
+    <div class="ui segment inverted blue">
 
       <h5 class="ui horizontal header divider">
         <i class="icon write"></i>
@@ -169,7 +169,7 @@
 
 
     <!--buttons-->
-    <div class="ui  ">
+    <div class="ui">
       <div class="ui grid stackable">
         <div class="four wide column">
 
@@ -192,7 +192,7 @@
             <input type="text" value="http://www.codestairs.com/edit/{{pathDetails.editId}}" readonly>
             <button class="ui blue right labeled icon button">
               <i class="copy icon"></i>
-              Edit URL
+              Copy URL for edit
             </button>
           </div>
 

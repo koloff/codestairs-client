@@ -7,9 +7,9 @@
       <div class="ui inverted dimmer">
         <div class="content">
           <div class="center">
-            <button :href="'http://' + url" target="_blank" class="ui button primary icon">
+            <a :href="'http://' + url" target="_blank" class="ui button primary icon">
               <i class="ui icon world"></i>
-              Open</button>
+              Open</a>
           </div>
         </div>
       </div>

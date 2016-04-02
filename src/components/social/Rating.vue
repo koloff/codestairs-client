@@ -41,6 +41,7 @@
             notifier('success', 'Vote done!');
           } catch (err) {
             console.log(err);
+            notifier('error', 'Login to vote!');
           }
         });
       }

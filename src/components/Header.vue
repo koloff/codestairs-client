@@ -18,7 +18,7 @@
 
 
 
-        <a class="item center">
+        <a v-link="{path: '/api'}" class="item center">
           <i class="ui icon code"></i>
           API
         </a>

@@ -4,7 +4,17 @@
     <!--modal for new request-->
     <div>
       <div id="new-request" class="ui modal basic">
-        <div class="content">
+        <div v-if="!identity.authenticated" class="content">
+          <div class="ui segment center aligned basic">
+            <h2 class="ui inverted icon header">
+              <i class="lock icon"></i>
+              Only for registered users
+            </h2>
+            <br />
+            <button @click="loginAndHide()" class="ui green button">Login</button>
+          </div>
+        </div>
+        <div v-if="identity.authenticated" class="content">
           <div class="ui grid center aligned">
             <div class="column six wide">
               <div class="ui form">
@@ -120,17 +130,18 @@
 </template>
 
 <script>
-  import NewRequest from './NewRequest.vue';
   import MiniRequest from './MiniRequest.vue';
   import  * as requestsFetcher from '../../http-fetchers/requests';
   import co from 'co';
   import notifier from '../../utils/notifier';
+  import * as identity from '../../store/identity';
 
   export default {
     name: 'RequestsPage',
     components: {MiniRequest},
     data() {
       return {
+        identity: identity.state,
         criteria: 'most-liked',
         period: 'this-week',
         requests: [],
@@ -143,6 +154,7 @@
     },
     ready() {
       let $requestsPeriod = $('#requests-period');
+      this.newRequestModal = $('#new-request');
 
       let self = this;
       $requestsPeriod.dropdown('set selected', this.period);
@@ -156,6 +168,11 @@
 
     },
     methods: {
+      loginAndHide() {
+        this.newRequestModal
+          .modal('hide');
+        this.$route.router.go('/authenticate');
+      },
       changeCriteria(criteria) {
         this.criteria = criteria;
         this.loadRequests();
@@ -164,7 +181,7 @@
         console.log('new request showed');
 
 
-        $('#new-request')
+        this.newRequestModal
           .modal({
             blurring: true
           })
@@ -175,6 +192,7 @@
         co(function *() {
           try {
             let result = yield requestsFetcher.addRequest(self.requestToAdd);
+            notifier('success', 'Request added successfully!');
           } catch (err) {
             console.log(err);
             notifier('error', 'Please specify what you want to learn!');
@@ -182,6 +200,9 @@
 
           self.loadRequests();
         });
+
+        this.newRequestModal
+          .modal('hide');
       },
       loadRequests() {
 
