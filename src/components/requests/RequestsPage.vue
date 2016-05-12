@@ -218,7 +218,7 @@
           case 'this-month':
             hoursLimit = 24 * 30;
             break;
-          case 'this.year':
+          case 'this-year':
             hoursLimit = 24 * 365;
             break;
           default:

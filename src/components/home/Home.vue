@@ -109,7 +109,7 @@
           case 'today': hoursLimit = 24; break;
           case 'this-week': hoursLimit = 24 * 7; break;
           case 'this-month': hoursLimit = 24 * 30; break;
-          case 'this.year': hoursLimit = 24 * 365; break;
+          case 'this-year': hoursLimit = 24 * 365; break;
           default: hoursLimit = 24 * 30;
         }
 
