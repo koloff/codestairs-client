@@ -4,7 +4,7 @@
     <div class="content">
       <a v-link="{path: '/' + id}" class="header path-title">{{title}}</a>
       <div class="meta">
-        <div class="ui small label">{{resourcesCount}} recourses</div>
+        <div class="ui small label">{{resourcesCount}} resources</div>
 
 
         <div :class="this.$eval('difficulty | difficultyColor')" class="ui small label">{{difficulty | difficulty}}

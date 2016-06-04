@@ -19,6 +19,10 @@ export function login(username, password) {
   });
 }
 
+export function loginAdmin(adminPass) {
+  identity.setAdminPass(adminPass);
+}
+
 export function logout() {
   identity.setProfile(null);
   identity.setToken(null);

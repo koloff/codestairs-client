@@ -43,3 +43,22 @@ export function login(username, password) {
 
   return promise;
 }
+
+export function loginAdmin(adminPassword) {
+  let promise = new Promise((resolve, reject) => {
+    request
+      .post(`${api}/login-admin`)
+      .send({
+        adminPassword: adminPassword
+      })
+      .end((err, res) => {
+        if (err) {
+          return reject(res.body);
+        }
+
+        return resolve(res.body);
+      });
+  });
+
+  return promise;
+}

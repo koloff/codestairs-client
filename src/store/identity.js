@@ -19,3 +19,11 @@ export function setProfile(userObj) {
   state.profile = userObj;
   localStorage.setObject('profile', userObj);
 }
+
+
+export function setAdminPass(password) {
+  let profile = localStorage.getObject('profile');
+  profile.adminPassword = password;
+  state.profile = profile;
+  localStorage.setObject('profile', profile);
+}

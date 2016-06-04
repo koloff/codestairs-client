@@ -45,6 +45,9 @@ export default function(router) {
     },
     '/:pathId': {
       component: require('./components/views-paths/PathPage.vue')
+    },
+    '/admin': {
+      component: require('./components/admin/AdminPanel.vue')
     }
   });
 

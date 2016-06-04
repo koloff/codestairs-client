@@ -1,7 +1,7 @@
 import request from 'superagent';
 import {api} from './../config';
 
-// todo update course will be on /courses/:courseId with put
+// todo update course will be on /courses/:courseId
 
 
 export function addPath(path) {
